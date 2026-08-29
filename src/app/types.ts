@@ -44,7 +44,7 @@ export interface OrderItem {
 }
 
 export type OrderStatus = 'pending' | 'paid' | 'preparing' | 'shipped' | 'delivered' | 'cancelled'
-export type PaymentMethod = 'wave' | 'orange_money' | 'card' | 'cash' | 'mtn_momo'
+export type PaymentMethod = 'mtn_momo' | 'airtel_money' | 'card' | 'cash' | 'wave' | 'orange_money'
 
 export interface Order {
   id: string

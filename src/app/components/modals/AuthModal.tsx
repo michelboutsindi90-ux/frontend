@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { X, Sparkles, Lock, Mail, Phone, ArrowRight, Check, Store } from 'lucide-react'
+import { X, Sparkles, Lock, Mail, Phone, ArrowRight, Check, Store, Eye, EyeOff, Maximize2 } from 'lucide-react'
 import confetti from 'canvas-confetti'
 
 interface AuthModalProps {
@@ -8,6 +8,7 @@ interface AuthModalProps {
   onClose: () => void
   user: { name: string; email: string; storeName: string }
   onLoginSuccess: (userData: { name: string; email: string; storeName: string }) => void
+  onOpenFullPage?: () => void
 }
 
 export function AuthModal({
@@ -15,10 +16,12 @@ export function AuthModal({
   onClose,
   user,
   onLoginSuccess,
+  onOpenFullPage,
 }: AuthModalProps) {
   const [mode, setMode] = useState<'login' | 'register'>('login')
   const [emailOrPhone, setEmailOrPhone] = useState(user.email)
-  const [password, setPassword] = useState('••••••••')
+  const [password, setPassword] = useState('Mercato2026!')
+  const [showPassword, setShowPassword] = useState(false)
   const [storeNameInput, setStoreNameInput] = useState(user.storeName)
   const [userNameInput, setUserNameInput] = useState(user.name)
   const [isLoading, setIsLoading] = useState(false)
@@ -50,22 +53,37 @@ export function AuthModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.2 }}
-          className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-stone-200 overflow-hidden"
+          className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-stone-200 overflow-hidden relative"
         >
           {/* Header */}
           <div className="p-6 bg-gradient-to-b from-[#FFF4BF]/50 to-white text-center relative border-b border-stone-100">
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 w-8 h-8 rounded-xl bg-white/80 hover:bg-white flex items-center justify-center text-stone-600 shadow-2xs"
-            >
-              <X size={16} />
-            </button>
+            <div className="absolute top-4 right-4 flex items-center gap-1.5">
+              {onOpenFullPage && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose()
+                    onOpenFullPage()
+                  }}
+                  title="Ouvrir en plein écran"
+                  className="w-8 h-8 rounded-xl bg-white/80 hover:bg-white flex items-center justify-center text-stone-600 shadow-2xs transition-colors"
+                >
+                  <Maximize2 size={14} />
+                </button>
+              )}
+              <button
+                onClick={onClose}
+                className="w-8 h-8 rounded-xl bg-white/80 hover:bg-white flex items-center justify-center text-stone-600 shadow-2xs transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
 
             <div className="w-12 h-12 rounded-2xl bg-[#FFD43B] text-[#171717] flex items-center justify-center mx-auto shadow-md shadow-[#FFD43B]/40 mb-3">
               <Store size={24} />
@@ -134,18 +152,27 @@ export function AuthModal({
               <div className="flex items-center justify-between mb-1">
                 <label className="text-xs font-bold text-[#171717]">Mot de passe</label>
                 {mode === 'login' && (
-                  <a href="#" className="text-[11px] font-semibold text-stone-500 hover:underline">
-                    Mot de passe oublié ?
-                  </a>
+                  <span className="text-[11px] font-semibold text-stone-500">
+                    Sécurisé SSL
+                  </span>
                 )}
               </div>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-2xl bg-[#F6F6F3] border border-stone-200 text-xs font-medium text-[#171717] outline-none focus:border-[#FFD43B] focus:bg-white"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-4 pr-10 py-2.5 rounded-2xl bg-[#F6F6F3] border border-stone-200 text-xs font-medium text-[#171717] outline-none focus:border-[#FFD43B] focus:bg-white"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-500 hover:text-stone-700"
+                >
+                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
+              </div>
             </div>
 
             <motion.button
@@ -165,16 +192,30 @@ export function AuthModal({
               )}
             </motion.button>
 
-            <div className="text-center pt-2">
+            <div className="flex items-center justify-between pt-1">
               <button
                 type="button"
                 onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
                 className="text-xs font-bold text-stone-600 hover:text-[#171717]"
               >
                 {mode === 'login'
-                  ? "Pas encore de compte ? Créer ma boutique"
-                  : 'Déjà un compte ? Se connecter'}
+                  ? "Créer une boutique"
+                  : 'Se connecter'}
               </button>
+
+              {onOpenFullPage && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose()
+                    onOpenFullPage()
+                  }}
+                  className="text-xs font-bold text-amber-700 hover:underline flex items-center gap-1"
+                >
+                  <Sparkles size={12} />
+                  <span>Page animée & Démo</span>
+                </button>
+              )}
             </div>
           </form>
         </motion.div>

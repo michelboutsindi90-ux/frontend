@@ -17,6 +17,7 @@ import {
   Check,
   Building2,
   FolderPlus,
+  KeyRound,
 } from 'lucide-react'
 import { ActiveTab, StoreConfig } from '../../types'
 
@@ -336,6 +337,30 @@ export function Header({
                 >
                   <Store size={15} className="text-stone-700" />
                   <span>Aperçu Boutique Client</span>
+                </button>
+
+                <div className="h-px bg-stone-100 my-1" />
+
+                <button
+                  onClick={() => {
+                    setUserMenuOpen(false)
+                    setActiveTab('auth')
+                  }}
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-[#171717] bg-[#FFF4BF]/50 hover:bg-[#FFF4BF]"
+                >
+                  <KeyRound size={15} className="text-[#171717]" />
+                  <span>Page de Connexion (Animée)</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setUserMenuOpen(false)
+                    setActiveTab('auth')
+                  }}
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-red-600 hover:bg-red-50"
+                >
+                  <LogOut size={15} className="text-red-500" />
+                  <span>Se déconnecter</span>
                 </button>
               </motion.div>
             )}

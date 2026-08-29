@@ -16,6 +16,7 @@ import { AnalyticsView } from './components/views/AnalyticsView'
 import { PosView } from './components/views/PosView'
 import { StorefrontPreviewView } from './components/views/StorefrontPreviewView'
 import { SettingsView } from './components/views/SettingsView'
+import { AuthView } from './components/views/AuthView'
 
 // Modals
 import { AddProductModal } from './components/modals/AddProductModal'
@@ -285,6 +286,47 @@ export default function App() {
     setNotifications(notifications.map((n) => ({ ...n, read: true })))
   }
 
+  // Handle Login / Authentication Success
+  const handleLoginSuccess = (userData: {
+    name: string
+    email: string
+    storeName: string
+    role?: 'owner' | 'cashier' | 'admin'
+    selectedStore?: StoreConfig
+  }) => {
+    setUser({
+      name: userData.name,
+      email: userData.email,
+      storeName: userData.storeName,
+    })
+
+    if (userData.selectedStore) {
+      setCurrentStore(userData.selectedStore)
+    }
+
+    const newNotif: NotificationItem = {
+      id: `notif-${Date.now()}`,
+      title: `Bienvenue, ${userData.name} ! 👋`,
+      message: `Connexion réussie à votre espace commerçant (${userData.storeName}).`,
+      timestamp: 'À l’instant',
+      type: 'system',
+      read: false,
+    }
+    setNotifications([newNotif, ...notifications])
+    setActiveTab('dashboard')
+  }
+
+  // If in dedicated full-page Auth mode, render full-screen AuthView
+  if (activeTab === 'auth') {
+    return (
+      <AuthView
+        currentStores={stores}
+        onLoginSuccess={handleLoginSuccess}
+        onBackToApp={() => setActiveTab('dashboard')}
+      />
+    )
+  }
+
   return (
     <div className="min-h-screen w-full max-w-full bg-[#F6F6F3] text-[#171717] font-sans antialiased flex flex-col md:flex-row overflow-x-hidden">
       {/* Global Command Palette (Cmd + K) */}
@@ -515,7 +557,8 @@ export default function App() {
         isOpen={isAuthOpen}
         onClose={() => setIsAuthOpen(false)}
         user={user}
-        onLoginSuccess={(newUserData) => setUser(newUserData)}
+        onLoginSuccess={handleLoginSuccess}
+        onOpenFullPage={() => setActiveTab('auth')}
       />
     </div>
   )

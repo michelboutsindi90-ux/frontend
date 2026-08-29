@@ -31,7 +31,7 @@ export function PosView({ products, onCompleteSale }: PosViewProps) {
   const [cart, setCart] = useState<CartItem[]>([])
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
-  const [paymentMethod, setPaymentMethod] = useState<'wave' | 'orange_money' | 'card' | 'cash'>('wave')
+  const [paymentMethod, setPaymentMethod] = useState<'mtn_momo' | 'airtel_money' | 'card' | 'cash'>('mtn_momo')
   const [discountPercent, setDiscountPercent] = useState<number>(0)
   const [customerName, setCustomerName] = useState('Client Caisse Boutique')
   const [showSuccessModal, setShowSuccessModal] = useState(false)
@@ -363,8 +363,8 @@ export function PosView({ products, onCompleteSale }: PosViewProps) {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {(
                   [
-                    { id: 'wave', label: 'Wave' },
-                    { id: 'orange_money', label: 'Orange' },
+                    { id: 'mtn_momo', label: 'MTN MoMo' },
+                    { id: 'airtel_money', label: 'Airtel Money' },
                     { id: 'card', label: 'Carte' },
                     { id: 'cash', label: 'Espèces' },
                   ] as const

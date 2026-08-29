@@ -33,6 +33,7 @@ import {
 import { Product, StoreConfig, WholesaleTier } from '../../types'
 import { formatCurrency } from '../../utils/formatters'
 import confetti from 'canvas-confetti'
+import { GoldenStageBackground } from '../ui/GoldenStageBackground'
 
 interface StorefrontPreviewViewProps {
   products: Product[]
@@ -81,11 +82,11 @@ export function StorefrontPreviewView({
   // Simulated live buyers ticker
   useEffect(() => {
     const buyers = [
-      { name: 'Awa K.', city: 'Abidjan Cocody', item: 'Sac Bandoulière Safari' },
-      { name: 'Ibrahim D.', city: 'Dakar Almadies', item: 'Écouteurs Pro ANC' },
-      { name: 'Kouassi M.', city: 'San Pedro', item: 'Perceuse Brushless 20V (Lot)' },
-      { name: 'Mariam T.', city: 'Yamoussoukro', item: 'Sérum Éclat Karité' },
-      { name: 'Jean-Paul', city: 'Abidjan Plateau', item: 'Café Grand Cru 500g' },
+      { name: 'Grâce M.', city: 'Brazzaville Bacongo', item: 'Sac Bandoulière Safari' },
+      { name: 'Rodrigue P.', city: 'Pointe-Noire Lumumba', item: 'Écouteurs Pro ANC' },
+      { name: 'Dieudonné O.', city: 'Brazzaville Poto-Poto', item: 'Perceuse Brushless 20V (Lot)' },
+      { name: 'Chantal N.', city: 'Dolisie Centre', item: 'Sérum Éclat Safou & Baobab' },
+      { name: 'Alain M.', city: 'Brazzaville Centre-ville', item: 'Café Grand Cru Mayombe 500g' },
     ]
     let index = 0
     const interval = setInterval(() => {
@@ -425,42 +426,42 @@ export function StorefrontPreviewView({
               </button>
             </div>
 
-            {/* Flash Deals Hero Banner with Live Countdown Clock */}
-            <div className="relative bg-gradient-to-r from-[#171717] via-stone-900 to-[#2A2416] text-white px-4 sm:px-8 py-6 overflow-hidden">
+            {/* Flash Deals Hero Banner with Golden Stage Podium & Ribbons (Inspired by Reference Images) */}
+            <div className="relative bg-[#0A0A0D] text-white px-4 sm:px-8 py-8 overflow-hidden min-h-[220px] flex items-center justify-between">
+              {/* Scenographic Golden Stage Background */}
+              <GoldenStageBackground showPodium={true} showParticles={true} intensity="subtle" className="opacity-90" />
+
               <div className="relative z-10 max-w-xl space-y-3">
                 <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-red-600 text-white shadow-sm animate-pulse">
-                    <Flame size={12} className="fill-white" /> VENTE ÉCLAIR
+                  <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-red-500 text-white shadow-sm animate-pulse">
+                    <Flame size={12} className="fill-white" /> VENTE ÉCLAIR EXCLUSIVE
                   </span>
                   
                   {/* Countdown Timer */}
-                  <div className="flex items-center gap-1 text-xs font-mono font-black text-[#FFD43B] bg-black/40 px-2.5 py-1 rounded-xl border border-[#FFD43B]/30">
-                    <Clock size={12} />
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-[#FFD43B] bg-black/60 backdrop-blur-md px-3 py-1 rounded-xl border border-[#FFD43B]/30 shadow-sm">
+                    <Clock size={13} />
                     <span>Fin dans :</span>
-                    <span className="bg-[#FFD43B] text-[#171717] px-1 py-0.5 rounded text-[11px]">
+                    <span className="bg-[#FFD43B] text-[#0C0C0E] px-1.5 py-0.5 rounded text-[11px] font-black">
                       {String(timeLeft.hours).padStart(2, '0')}
                     </span>
                     <span>:</span>
-                    <span className="bg-[#FFD43B] text-[#171717] px-1 py-0.5 rounded text-[11px]">
+                    <span className="bg-[#FFD43B] text-[#0C0C0E] px-1.5 py-0.5 rounded text-[11px] font-black">
                       {String(timeLeft.minutes).padStart(2, '0')}
                     </span>
                     <span>:</span>
-                    <span className="bg-[#FFD43B] text-[#171717] px-1 py-0.5 rounded text-[11px]">
+                    <span className="bg-[#FFD43B] text-[#0C0C0E] px-1.5 py-0.5 rounded text-[11px] font-black">
                       {String(timeLeft.seconds).padStart(2, '0')}
                     </span>
                   </div>
                 </div>
 
-                <h2 className="text-xl sm:text-2xl font-black text-white leading-tight">
+                <h2 className="text-xl sm:text-3xl font-extrabold text-white tracking-tight leading-tight">
                   {storeConfig.slogan || storeConfig.tagline}
                 </h2>
-                <p className="text-xs text-stone-300 leading-relaxed">
-                  Profitez de prix usine directs, de remises dégressives par quantité et de la livraison express partout à Abidjan et sous-région.
+                <p className="text-xs text-zinc-300 leading-relaxed max-w-md">
+                  Profitez de prix usine directs, de remises dégressives par quantité et de la livraison express partout à Abidjan et dans la sous-région UEMOA.
                 </p>
               </div>
-
-              {/* Decorative Golden Ambient Orb */}
-              <div className="absolute -right-8 -bottom-8 w-44 h-44 bg-[#FFD43B]/25 rounded-full blur-3xl pointer-events-none" />
             </div>
 
             {/* Category Pills Bar */}
@@ -685,15 +686,15 @@ export function StorefrontPreviewView({
                 <div className="flex items-center justify-center gap-2 p-3 rounded-2xl bg-[#F6F6F3]">
                   <Truck size={18} className="text-amber-600 shrink-0" />
                   <div className="text-left text-[11px]">
-                    <p className="font-extrabold text-[#171717]">Livraison 24h & Suivi</p>
-                    <p className="text-stone-400">Partout à Abidjan et intérieur</p>
+                    <p className="font-extrabold text-[#171717]">Livraison Express & Suivi</p>
+                    <p className="text-stone-400">Brazzaville, Pointe-Noire et intérieur du Congo</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-center gap-2 p-3 rounded-2xl bg-[#F6F6F3]">
                   <ShieldCheck size={18} className="text-emerald-600 shrink-0" />
                   <div className="text-left text-[11px]">
-                    <p className="font-extrabold text-[#171717]">Trade Assurance 100%</p>
-                    <p className="text-stone-400">Paiement Mobile Money sécurisé</p>
+                    <p className="font-extrabold text-[#171717]">Trade Assurance CEMAC 100%</p>
+                    <p className="text-stone-400">Paiement MTN MoMo & Airtel Money</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-center gap-2 p-3 rounded-2xl bg-[#F6F6F3]">
@@ -706,7 +707,7 @@ export function StorefrontPreviewView({
               </div>
 
               <p className="text-[10px] text-stone-400">
-                Boutique officielle propulsée par <strong>Mercato SaaS Platform</strong> • Tous droits réservés 2026.
+                Boutique officielle propulsée par <strong>Mercato SaaS Platform Congo</strong> • Tous droits réservés 2026.
               </p>
             </footer>
 
@@ -1051,14 +1052,14 @@ export function StorefrontPreviewView({
                             alert(
                               `🎉 Commande validée pour un montant de ${formatCurrency(
                                 finalCartTotal
-                              )} ! Redirection vers le paiement Mobile Money (Wave / Orange Money).`
+                              )} ! Redirection vers le paiement Mobile Money (MTN MoMo / Airtel Money Congo).`
                             )
                             setCart([])
                             setIsCartOpen(false)
                           }}
                           className="w-full py-3.5 rounded-2xl bg-[#FFD43B] text-[#171717] font-black text-xs shadow-lg shadow-[#FFD43B]/40 hover:brightness-105 transition-all flex items-center justify-center gap-2"
                         >
-                          <span>Paiement Sécurisé (Wave / OM / Carte)</span>
+                          <span>Paiement Sécurisé (MTN MoMo / Airtel / Carte)</span>
                           <ArrowRight size={15} />
                         </button>
                       </div>

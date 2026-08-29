@@ -113,8 +113,8 @@ export function OrdersView({ orders, onSelectOrder }: OrdersViewProps) {
             className="w-full md:w-44 px-3 py-2 rounded-2xl bg-[#F6F6F3] text-xs font-semibold text-stone-700 outline-none"
           >
             <option value="all">Tous paiements</option>
-            <option value="wave">Wave</option>
-            <option value="orange_money">Orange Money</option>
+            <option value="mtn_momo">MTN MoMo</option>
+            <option value="airtel_money">Airtel Money</option>
             <option value="card">Carte bancaire</option>
             <option value="cash">Espèces</option>
           </select>

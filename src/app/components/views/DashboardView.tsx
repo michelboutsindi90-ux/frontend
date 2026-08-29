@@ -28,6 +28,7 @@ import {
 import { Product, Order, Customer, ActiveTab } from '../../types'
 import { formatCurrency, formatNumber, getStatusBadge } from '../../utils/formatters'
 import { salesEvolutionData } from '../../data/initialData'
+import { GoldenStageBackground } from '../ui/GoldenStageBackground'
 
 interface DashboardViewProps {
   products: Product[]
@@ -64,42 +65,71 @@ export function DashboardView({
 
   return (
     <div id="dashboard-view" className="space-y-8 pb-16">
-      {/* Top Greeting & Quick Actions Header */}
+      {/* Top Scenographic Golden Stage Hero Header */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-white via-white to-[#FFF4BF]/30 p-6 rounded-3xl border border-stone-200/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)]"
+        transition={{ duration: 0.35 }}
+        className="relative rounded-3xl overflow-hidden border border-white/[0.1] shadow-2xl p-6 sm:p-8 min-h-[220px] flex flex-col justify-between"
       >
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl md:text-3xl font-extrabold text-[#171717] tracking-tight">
-              Bonjour, bienvenue sur Mercato 👋
+        {/* Animated Golden Stage Background Overlay */}
+        <GoldenStageBackground showPodium={true} showParticles={true} intensity="medium" className="opacity-90" />
+
+        {/* Content Layer */}
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#18181F]/90 backdrop-blur-md border border-[#FFD43B]/30 text-xs font-semibold text-zinc-200 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-[#FFD43B] animate-pulse" />
+              <span>Tableau de bord Prestige • Brazzaville HQ</span>
+            </div>
+
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
+              Bonjour, bienvenue sur <span className="text-[#FFD43B]">Mercato</span> 👋
             </h1>
+
+            <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+              Suivi en direct de vos ventes, synchronisation instantanée des stocks et encaissements mobiles multi-boutiques.
+            </p>
           </div>
-          <p className="text-sm text-[#777777] mt-1">
-            Voici ce qui se passe dans votre boutique aujourd'hui.
-          </p>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              id="dash-quick-pos"
+              onClick={onNewSale}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#141418]/90 hover:bg-[#1E1E24] backdrop-blur-md text-white text-xs font-bold transition-all border border-white/[0.12] hover:border-[#FFD43B]/40 shadow-lg cursor-pointer group"
+            >
+              <CreditCard size={15} className="text-[#FFD43B] group-hover:scale-110 transition-transform" />
+              <span>Ouvrir Caisse</span>
+            </button>
+
+            <button
+              id="dash-quick-add-prod"
+              onClick={onNewProduct}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#FFD43B] hover:bg-[#F5C72B] text-[#0C0C0E] text-xs font-black shadow-lg shadow-[#FFD43B]/20 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Plus size={16} strokeWidth={3} />
+              <span>Ajouter Produit</span>
+            </button>
+          </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            id="dash-quick-pos"
-            onClick={onNewSale}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#171717] hover:bg-black text-white text-xs font-bold transition-all shadow-sm group"
-          >
-            <CreditCard size={15} className="text-[#FFD43B]" />
-            <span>Ouvrir Caisse</span>
-          </button>
+        {/* Live Ticker Mini Bar at bottom of Hero */}
+        <div className="relative z-10 mt-6 pt-4 border-t border-white/[0.1] flex flex-wrap items-center justify-between gap-3 text-xs text-zinc-300">
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1.5 font-medium">
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span>Caisse synchronisée</span>
+            </span>
+            <span className="text-zinc-500">•</span>
+            <span className="text-zinc-300">
+              <strong className="text-white font-bold">{orders.length}</strong> commandes aujourd'hui
+            </span>
+          </div>
 
-          <button
-            id="dash-quick-add-prod"
-            onClick={onNewProduct}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#FFD43B] text-[#171717] text-xs font-bold shadow-md shadow-[#FFD43B]/30 hover:brightness-105 transition-all"
-          >
-            <Plus size={16} />
-            <span>Ajouter Produit</span>
-          </button>
+          <div className="text-[11px] text-[#FFD43B] font-semibold flex items-center gap-1">
+            <Sparkles size={12} />
+            <span>Mode Performance Actif</span>
+          </div>
         </div>
       </motion.div>
 

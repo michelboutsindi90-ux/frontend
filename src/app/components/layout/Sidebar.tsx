@@ -15,6 +15,7 @@ import {
   ChevronRight,
   PlusCircle,
   FolderPlus,
+  LogIn,
 } from 'lucide-react'
 import { ActiveTab, StoreConfig } from '../../types'
 
@@ -62,6 +63,7 @@ export function Sidebar({
     { id: 'suppliers' as ActiveTab, label: 'Fournisseurs Usine', icon: Truck },
     { id: 'analytics' as ActiveTab, label: 'Analyses & Rapports', icon: BarChart3 },
     { id: 'settings' as ActiveTab, label: 'Paramètres Boutique', icon: Settings },
+    { id: 'auth' as ActiveTab, label: 'Page de Connexion', icon: LogIn, badge: 'Animée' },
   ]
 
   const activeStoreName = currentStore?.name || storeName
