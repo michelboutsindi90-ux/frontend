@@ -1,0 +1,8 @@
+{
+  "name": "Mercato",
+  "description": "Plateforme SaaS de gestion de boutique, ventes, commandes, clients et stocks.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
