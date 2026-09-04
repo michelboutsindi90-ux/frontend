@@ -4,36 +4,22 @@ import {
   LayoutDashboard,
   Package,
   ShoppingBag,
-  Users,
   CreditCard,
   Boxes,
-  Truck,
-  Store,
-  BarChart3,
   Settings,
   ChevronLeft,
   ChevronRight,
-  PlusCircle,
   FolderPlus,
-  LogIn,
 } from 'lucide-react'
-import { ActiveTab, StoreConfig } from '../../types'
+import { ActiveTab } from '../../types'
+import { useShop } from '../../context/ShopContext'
 
 interface SidebarProps {
   activeTab: ActiveTab
   setActiveTab: (tab: ActiveTab) => void
   isCollapsed: boolean
   setIsCollapsed: (collapsed: boolean) => void
-  storeName?: string
-  currentStore?: StoreConfig
-  allStores?: StoreConfig[]
-  onOpenCreateStore?: () => void
-  userName?: string
-  userEmail?: string
-  unreadNotifsCount?: number
-  onOpenNotifs?: () => void
-  onOpenStorePreview?: () => void
-  onOpenAuth?: () => void
+  onOpenCreateStore: () => void
 }
 
 export function Sidebar({
@@ -41,33 +27,20 @@ export function Sidebar({
   setActiveTab,
   isCollapsed,
   setIsCollapsed,
-  storeName = 'Mercato Concept Store',
-  currentStore,
-  allStores = [],
-  onOpenCreateStore = () => {},
-  userName = 'Kouamé Diallo',
-  userEmail = 'kouame@mercatoboutique.com',
-  unreadNotifsCount = 0,
-  onOpenNotifs = () => {},
-  onOpenStorePreview = () => {},
-  onOpenAuth = () => {},
+  onOpenCreateStore,
 }: SidebarProps) {
+  const { currentShop } = useShop()
+
   const mainNavItems = [
     { id: 'dashboard' as ActiveTab, label: 'Tableau de bord', icon: LayoutDashboard },
-    { id: 'storefront' as ActiveTab, label: 'Boutique Client', icon: Store, isLive: true, badge: 'Live' },
-    { id: 'products' as ActiveTab, label: 'Articles & Paliers', icon: Package, badge: '8' },
-    { id: 'orders' as ActiveTab, label: 'Commandes', icon: ShoppingBag, badge: '3' },
-    { id: 'customers' as ActiveTab, label: 'Clients & Grossistes', icon: Users },
-    { id: 'pos' as ActiveTab, label: 'Caisse & Ventes', icon: CreditCard },
-    { id: 'stock' as ActiveTab, label: 'Stock & Alertes', icon: Boxes, alert: true },
-    { id: 'suppliers' as ActiveTab, label: 'Fournisseurs Usine', icon: Truck },
-    { id: 'analytics' as ActiveTab, label: 'Analyses & Rapports', icon: BarChart3 },
-    { id: 'settings' as ActiveTab, label: 'Paramètres Boutique', icon: Settings },
-    { id: 'auth' as ActiveTab, label: 'Page de Connexion', icon: LogIn, badge: 'Animée' },
+    { id: 'products' as ActiveTab, label: 'Produits', icon: Package },
+    { id: 'pos' as ActiveTab, label: 'Caisse', icon: CreditCard },
+    { id: 'sales' as ActiveTab, label: 'Ventes', icon: ShoppingBag },
+    { id: 'stock' as ActiveTab, label: 'Stock & Alertes', icon: Boxes },
+    { id: 'settings' as ActiveTab, label: 'Paramètres', icon: Settings },
   ]
 
-  const activeStoreName = currentStore?.name || storeName
-  const activeStoreType = currentStore?.typeLabel || currentStore?.type || 'Mode & Concept'
+  const activeStoreName = currentShop?.name || 'Aucune boutique'
 
   return (
     <motion.aside
@@ -84,7 +57,6 @@ export function Sidebar({
             onClick={() => setActiveTab('dashboard')}
             className={`flex items-center gap-3 cursor-pointer group min-w-0 ${isCollapsed ? 'justify-center w-full' : ''}`}
           >
-            {/* 3D-inspired Mercato Golden Cube Icon */}
             <div className="relative w-10 h-10 rounded-2xl bg-[#FFD43B] flex items-center justify-center shadow-md shadow-[#FFD43B]/30 group-hover:scale-105 transition-transform duration-200 shrink-0">
               <span className="text-[#171717] font-black text-xl tracking-tight">M</span>
               <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#171717] border-2 border-white flex items-center justify-center">
@@ -100,12 +72,7 @@ export function Sidebar({
                 className="overflow-hidden min-w-0"
               >
                 <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold text-lg text-[#171717] tracking-tight">
-                    Mercato
-                  </span>
-                  <span className="text-[9px] uppercase font-black tracking-wider px-1.5 py-0.5 rounded-md bg-[#FFF4BF] text-[#171717] border border-[#FFD43B]/40">
-                    SaaS
-                  </span>
+                  <span className="font-extrabold text-lg text-[#171717] tracking-tight">Mercato</span>
                 </div>
                 <p className="text-[11px] text-stone-500 font-semibold truncate max-w-[140px]">
                   {activeStoreName}
@@ -114,7 +81,6 @@ export function Sidebar({
             )}
           </div>
 
-          {/* Collapse Toggle Button */}
           <button
             id="sidebar-toggle-btn"
             onClick={() => setIsCollapsed(!isCollapsed)}
@@ -147,9 +113,7 @@ export function Sidebar({
                 className={`w-full flex items-center ${
                   isCollapsed ? 'justify-center px-0' : 'gap-3.5 px-3.5'
                 } py-2.5 rounded-2xl text-xs font-bold transition-all duration-200 relative group ${
-                  isActive
-                    ? 'bg-[#171717] text-white shadow-sm'
-                    : 'text-[#171717] hover:bg-[#F6F6F3]'
+                  isActive ? 'bg-[#171717] text-white shadow-sm' : 'text-[#171717] hover:bg-[#F6F6F3]'
                 }`}
                 title={isCollapsed ? item.label : undefined}
               >
@@ -159,37 +123,14 @@ export function Sidebar({
                     isActive ? 'text-[#FFD43B]' : 'text-stone-600'
                   }`}
                 />
-
-                {!isCollapsed && (
-                  <span className="truncate flex-1 text-left">{item.label}</span>
-                )}
-
-                {!isCollapsed && item.isLive && (
-                  <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-red-600 text-white animate-pulse">
-                    LIVE
-                  </span>
-                )}
-
-                {!isCollapsed && item.badge && !item.isLive && (
-                  <span
-                    className={`text-[10px] font-black px-2 py-0.5 rounded-full ${
-                      isActive ? 'bg-[#FFD43B] text-[#171717]' : 'bg-[#F6F6F3] text-stone-600'
-                    }`}
-                  >
-                    {item.badge}
-                  </span>
-                )}
-
-                {isCollapsed && item.badge && (
-                  <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#FFD43B]" />
-                )}
+                {!isCollapsed && <span className="truncate flex-1 text-left">{item.label}</span>}
               </button>
             )
           })}
         </div>
       </div>
 
-      {/* Multi-Store SaaS Quick Creator Box */}
+      {/* Quick Creator Box */}
       <div className="p-3 border-t border-stone-100 bg-[#FBFBFA]">
         {!isCollapsed ? (
           <div className="space-y-2">
@@ -202,7 +143,6 @@ export function Sidebar({
             </button>
             <div className="p-2.5 rounded-xl bg-white border border-stone-200/70 text-[10px] text-stone-500">
               <p className="font-extrabold text-[#171717] truncate">{activeStoreName}</p>
-              <p className="truncate text-stone-400">{activeStoreType}</p>
             </div>
           </div>
         ) : (

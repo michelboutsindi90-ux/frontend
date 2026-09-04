@@ -17,7 +17,7 @@ export function MobileBottomNav({
     { id: 'dashboard' as ActiveTab, label: 'Accueil', icon: LayoutDashboard },
     { id: 'products' as ActiveTab, label: 'Produits', icon: Package },
     { id: 'pos' as ActiveTab, label: 'Caisse', icon: CreditCard, highlight: true },
-    { id: 'orders' as ActiveTab, label: 'Commandes', icon: ShoppingBag },
+    { id: 'sales' as ActiveTab, label: 'Ventes', icon: ShoppingBag },
     { id: 'stock' as ActiveTab, label: 'Stock', icon: Boxes },
   ]
 
