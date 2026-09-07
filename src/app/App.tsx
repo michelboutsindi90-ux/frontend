@@ -30,7 +30,7 @@ import { FolderPlus, Loader2 } from 'lucide-react'
 
 function AppShell() {
   const { currentShop } = useShop()
-  const { canManage } = useShopRole()
+  const { canManage, effectiveRole, isOwner } = useShopRole()
   const { categories, productsWithStock, refetch: refetchCatalog } = useShopCatalog(currentShop?.id)
   const { sales, refetch: refetchSales } = useShopSales(currentShop?.id)
 
@@ -96,6 +96,8 @@ function AppShell() {
         setActiveTab={setActiveTab}
         isCollapsed={isSidebarCollapsed}
         setIsCollapsed={setIsSidebarCollapsed}
+        isOwner={isOwner}
+        effectiveRole={effectiveRole}
         onOpenCreateStore={() => setIsCreateStoreOpen(true)}
       />
 
@@ -104,6 +106,8 @@ function AppShell() {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           canManage={canManage}
+          effectiveRole={effectiveRole}
+          isOwner={isOwner}
           onOpenCreateStore={() => setIsCreateStoreOpen(true)}
           onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
           onOpenAddProduct={() => setIsAddProductOpen(true)}

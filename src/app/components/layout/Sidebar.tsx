@@ -11,7 +11,7 @@ import {
   ChevronRight,
   FolderPlus,
 } from 'lucide-react'
-import { ActiveTab } from '../../types'
+import { ActiveTab, UserRole } from '../../types'
 import { useShop } from '../../context/ShopContext'
 
 interface SidebarProps {
@@ -19,6 +19,8 @@ interface SidebarProps {
   setActiveTab: (tab: ActiveTab) => void
   isCollapsed: boolean
   setIsCollapsed: (collapsed: boolean) => void
+  isOwner: boolean
+  effectiveRole?: UserRole
   onOpenCreateStore: () => void
 }
 
@@ -27,17 +29,24 @@ export function Sidebar({
   setActiveTab,
   isCollapsed,
   setIsCollapsed,
+  isOwner,
+  effectiveRole,
   onOpenCreateStore,
 }: SidebarProps) {
   const { currentShop } = useShop()
 
+  // A pure cashier only sells — the settings page (shop identity + team) has
+  // nothing for them, so the nav item is skipped rather than leading to a
+  // disabled/empty screen.
   const mainNavItems = [
     { id: 'dashboard' as ActiveTab, label: 'Tableau de bord', icon: LayoutDashboard },
     { id: 'products' as ActiveTab, label: 'Produits', icon: Package },
     { id: 'pos' as ActiveTab, label: 'Caisse', icon: CreditCard },
     { id: 'sales' as ActiveTab, label: 'Ventes', icon: ShoppingBag },
     { id: 'stock' as ActiveTab, label: 'Stock & Alertes', icon: Boxes },
-    { id: 'settings' as ActiveTab, label: 'Paramètres', icon: Settings },
+    ...(effectiveRole !== 'CASHIER'
+      ? [{ id: 'settings' as ActiveTab, label: 'Paramètres', icon: Settings }]
+      : []),
   ]
 
   const activeStoreName = currentShop?.name || 'Aucune boutique'
@@ -130,29 +139,33 @@ export function Sidebar({
         </div>
       </div>
 
-      {/* Quick Creator Box */}
+      {/* Quick Creator Box — only an owner can create a new shop */}
       <div className="p-3 border-t border-stone-100 bg-[#FBFBFA]">
         {!isCollapsed ? (
           <div className="space-y-2">
-            <button
-              onClick={onOpenCreateStore}
-              className="w-full flex items-center justify-center gap-2 p-2.5 rounded-2xl bg-[#FFD43B] hover:brightness-105 text-[#171717] font-black text-xs shadow-md shadow-[#FFD43B]/20 transition-all"
-            >
-              <FolderPlus size={15} />
-              <span>+ Nouvelle Boutique</span>
-            </button>
+            {isOwner && (
+              <button
+                onClick={onOpenCreateStore}
+                className="w-full flex items-center justify-center gap-2 p-2.5 rounded-2xl bg-[#FFD43B] hover:brightness-105 text-[#171717] font-black text-xs shadow-md shadow-[#FFD43B]/20 transition-all"
+              >
+                <FolderPlus size={15} />
+                <span>+ Nouvelle Boutique</span>
+              </button>
+            )}
             <div className="p-2.5 rounded-xl bg-white border border-stone-200/70 text-[10px] text-stone-500">
               <p className="font-extrabold text-[#171717] truncate">{activeStoreName}</p>
             </div>
           </div>
         ) : (
-          <button
-            onClick={onOpenCreateStore}
-            className="w-full h-10 rounded-2xl bg-[#FFD43B] text-[#171717] flex items-center justify-center font-black shadow-xs hover:brightness-105 transition-all"
-            title="Créer une nouvelle boutique"
-          >
-            <FolderPlus size={17} />
-          </button>
+          isOwner && (
+            <button
+              onClick={onOpenCreateStore}
+              className="w-full h-10 rounded-2xl bg-[#FFD43B] text-[#171717] flex items-center justify-center font-black shadow-xs hover:brightness-105 transition-all"
+              title="Créer une nouvelle boutique"
+            >
+              <FolderPlus size={17} />
+            </button>
+          )
         )}
       </div>
     </motion.aside>

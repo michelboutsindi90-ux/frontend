@@ -13,7 +13,6 @@ import {
   Boxes,
   RefreshCw,
   AlertCircle,
-  RotateCw,
   ScanLine,
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
@@ -100,8 +99,10 @@ export function AuthView({ initialMode = 'login' }: AuthViewProps) {
     <div className="min-h-screen w-full bg-[#0A0A0D] text-[#FAFAFA] relative overflow-hidden flex flex-col selection:bg-[#FFD43B] selection:text-[#0C0C0E]">
       <GoldenStageBackground showPodium={true} showParticles={true} intensity="high" />
 
-      {/* Header */}
-      <header className="relative z-20 w-full max-w-6xl mx-auto px-4 sm:px-8 py-6 flex items-center justify-between border-b border-white/[0.08]">
+      {/* Header — no register CTA here: self-registration stays available but
+          only as the discreet link inside the login card below, so "Se
+          connecter" is the one obvious action on this screen. */}
+      <header className="relative z-20 w-full max-w-6xl mx-auto px-4 sm:px-8 py-6 flex items-center border-b border-white/[0.08]">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-[#FFD43B] text-[#0C0C0E] flex items-center justify-center font-display font-bold text-xl shadow-md shadow-[#FFD43B]/25">
             M
@@ -111,18 +112,6 @@ export function AuthView({ initialMode = 'login' }: AuthViewProps) {
             <p className="text-xs text-zinc-400">Caisse & Gestion de Boutiques</p>
           </div>
         </div>
-
-        <button
-          type="button"
-          onClick={() => {
-            setIsFlipped(!isFlipped)
-            setErrorMessage(null)
-          }}
-          className="px-3 sm:px-4 py-2 rounded-xl bg-[#18181D] hover:bg-[#222228] text-xs font-semibold text-zinc-200 border border-white/[0.1] hover:border-[#FFD43B]/40 flex items-center gap-2 transition-all cursor-pointer shadow-sm shrink-0 whitespace-nowrap"
-        >
-          <RotateCw size={13} className="text-[#FFD43B] shrink-0" />
-          <span>{isFlipped ? 'Se connecter' : 'Créer un compte'}</span>
-        </button>
       </header>
 
       {/* Main */}

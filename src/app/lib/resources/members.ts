@@ -7,9 +7,12 @@ export function listMembers(shopId: string): Promise<ShopMember[]> {
 
 export function addMember(
   shopId: string,
-  dto: { email: string; role: 'MANAGER' | 'CASHIER' }
-): Promise<ShopMember> {
-  return apiRequest<ShopMember>(`/shops/${shopId}/members`, { method: 'POST', body: dto })
+  dto: { email: string; fullName: string; role: 'MANAGER' | 'CASHIER' }
+): Promise<ShopMember & { temporaryPassword?: string }> {
+  return apiRequest<ShopMember & { temporaryPassword?: string }>(`/shops/${shopId}/members`, {
+    method: 'POST',
+    body: dto,
+  })
 }
 
 export function updateMember(

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Users, UserPlus, Trash2 } from 'lucide-react'
+import { Users, UserPlus, Trash2, KeyRound, Copy, Check } from 'lucide-react'
 import { useShop } from '../../context/ShopContext'
 import { useShopRole } from '../../hooks/useShopRole'
 import { ShopMember } from '../../types'
@@ -12,10 +12,16 @@ export function TeamSection() {
   const canSeeTeam = isOwner || effectiveRole === 'MANAGER'
   const [members, setMembers] = useState<ShopMember[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [inviteName, setInviteName] = useState('')
   const [inviteEmail, setInviteEmail] = useState('')
   const [inviteRole, setInviteRole] = useState<'MANAGER' | 'CASHIER'>('CASHIER')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isInviting, setIsInviting] = useState(false)
+  const [createdCredentials, setCreatedCredentials] = useState<{
+    email: string
+    password: string
+  } | null>(null)
+  const [isCopied, setIsCopied] = useState(false)
 
   useEffect(() => {
     if (!currentShop || !canSeeTeam) return
@@ -31,29 +37,38 @@ export function TeamSection() {
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!inviteEmail.trim()) return
+    if (!inviteEmail.trim() || !inviteName.trim()) return
     setIsInviting(true)
     setErrorMessage(null)
+    setCreatedCredentials(null)
     try {
-      await membersClient.addMember(currentShop.id, {
+      const result = await membersClient.addMember(currentShop.id, {
         email: inviteEmail.trim(),
+        fullName: inviteName.trim(),
         role: inviteRole,
       })
       // addMember's response has no `user` relation populated — refetch for display
       const refreshed = await membersClient.listMembers(currentShop.id)
       setMembers(refreshed)
+      if (result.temporaryPassword) {
+        setCreatedCredentials({ email: inviteEmail.trim(), password: result.temporaryPassword })
+      }
+      setInviteName('')
       setInviteEmail('')
     } catch (err) {
-      setErrorMessage(
-        err instanceof ApiError
-          ? err.status === 404
-            ? "Aucun compte n'existe avec cet email. La personne doit d'abord créer un compte Mercato."
-            : err.message
-          : "Impossible d'ajouter ce membre."
-      )
+      setErrorMessage(err instanceof ApiError ? err.message : "Impossible d'ajouter ce membre.")
     } finally {
       setIsInviting(false)
     }
+  }
+
+  const handleCopyCredentials = () => {
+    if (!createdCredentials) return
+    const text = `Email : ${createdCredentials.email}\nMot de passe : ${createdCredentials.password}`
+    navigator.clipboard?.writeText(text).then(() => {
+      setIsCopied(true)
+      setTimeout(() => setIsCopied(false), 2000)
+    })
   }
 
   const handleRoleChange = async (memberId: string, role: 'MANAGER' | 'CASHIER') => {
@@ -89,8 +104,47 @@ export function TeamSection() {
         </div>
       )}
 
-      <form onSubmit={handleInvite} className="flex flex-col sm:flex-row items-stretch sm:items-end gap-3">
-        <div className="flex-1">
+      {createdCredentials && (
+        <div className="p-4 rounded-2xl bg-[#171717] text-white space-y-2">
+          <div className="flex items-center gap-2 text-[#FFD43B]">
+            <KeyRound size={15} />
+            <p className="text-xs font-extrabold">Compte créé — transmettez ces identifiants</p>
+          </div>
+          <p className="text-xs text-stone-300">
+            <span className="text-stone-400">Email : </span>
+            {createdCredentials.email}
+          </p>
+          <p className="text-xs font-mono tracking-wide">
+            <span className="text-stone-400 font-sans">Mot de passe : </span>
+            {createdCredentials.password}
+          </p>
+          <button
+            type="button"
+            onClick={handleCopyCredentials}
+            className="mt-1 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-[10px] font-bold transition-colors"
+          >
+            {isCopied ? <Check size={12} /> : <Copy size={12} />}
+            <span>{isCopied ? 'Copié' : 'Copier'}</span>
+          </button>
+          <p className="text-[10px] text-stone-400 pt-1">
+            Ce mot de passe ne sera plus jamais affiché — communiquez-le maintenant à la personne concernée.
+          </p>
+        </div>
+      )}
+
+      <form onSubmit={handleInvite} className="flex flex-col sm:flex-row items-stretch sm:items-end gap-3 flex-wrap">
+        <div className="flex-1 min-w-[160px]">
+          <label className="block text-xs font-bold text-[#171717] mb-1.5">Nom complet</label>
+          <input
+            type="text"
+            required
+            value={inviteName}
+            onChange={(e) => setInviteName(e.target.value)}
+            placeholder="ex: Divine Mabiala"
+            className="w-full px-4 py-2.5 rounded-2xl bg-[#F6F6F3] border border-stone-200 text-xs font-medium text-[#171717] outline-none focus:border-[#FFD43B] focus:bg-white"
+          />
+        </div>
+        <div className="flex-1 min-w-[160px]">
           <label className="block text-xs font-bold text-[#171717] mb-1.5">Email du membre</label>
           <input
             type="email"

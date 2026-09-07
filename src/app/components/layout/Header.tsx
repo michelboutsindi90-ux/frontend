@@ -14,7 +14,7 @@ import {
   Check,
   FolderPlus,
 } from 'lucide-react'
-import { ActiveTab } from '../../types'
+import { ActiveTab, UserRole } from '../../types'
 import { useShop } from '../../context/ShopContext'
 import { useAuth } from '../../context/AuthContext'
 
@@ -22,15 +22,26 @@ interface HeaderProps {
   activeTab: ActiveTab
   setActiveTab: (tab: ActiveTab) => void
   canManage: boolean
+  effectiveRole?: UserRole
+  isOwner: boolean
   onOpenCreateStore: () => void
   onOpenCommandPalette: () => void
   onOpenAddProduct: () => void
+}
+
+const ROLE_LABELS: Record<UserRole, string> = {
+  ADMIN: 'Administrateur',
+  OWNER: 'Propriétaire',
+  MANAGER: 'Gérant',
+  CASHIER: 'Caissier',
 }
 
 export function Header({
   activeTab,
   setActiveTab,
   canManage,
+  effectiveRole,
+  isOwner,
   onOpenCreateStore,
   onOpenCommandPalette,
   onOpenAddProduct,
@@ -100,18 +111,20 @@ export function Header({
                   })}
                 </div>
 
-                <div className="pt-2 border-t border-stone-100">
-                  <button
-                    onClick={() => {
-                      setStoreMenuOpen(false)
-                      onOpenCreateStore()
-                    }}
-                    className="w-full flex items-center justify-center gap-2 p-2.5 rounded-2xl bg-[#171717] text-white hover:bg-stone-800 transition-all text-xs font-extrabold shadow-sm"
-                  >
-                    <FolderPlus size={14} className="text-white" />
-                    <span>+ Créer une nouvelle boutique</span>
-                  </button>
-                </div>
+                {isOwner && (
+                  <div className="pt-2 border-t border-stone-100">
+                    <button
+                      onClick={() => {
+                        setStoreMenuOpen(false)
+                        onOpenCreateStore()
+                      }}
+                      className="w-full flex items-center justify-center gap-2 p-2.5 rounded-2xl bg-[#171717] text-white hover:bg-stone-800 transition-all text-xs font-extrabold shadow-sm"
+                    >
+                      <FolderPlus size={14} className="text-white" />
+                      <span>+ Créer une nouvelle boutique</span>
+                    </button>
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
@@ -167,16 +180,18 @@ export function Header({
                   </button>
                 )}
 
-                <button
-                  onClick={() => {
-                    setQuickActionOpen(false)
-                    onOpenCreateStore()
-                  }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-xs font-bold text-stone-800 hover:bg-[#FFF4BF] transition-colors"
-                >
-                  <Store size={16} className="text-amber-600" />
-                  <span>Nouvelle boutique</span>
-                </button>
+                {isOwner && (
+                  <button
+                    onClick={() => {
+                      setQuickActionOpen(false)
+                      onOpenCreateStore()
+                    }}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-xs font-bold text-stone-800 hover:bg-[#FFF4BF] transition-colors"
+                  >
+                    <Store size={16} className="text-amber-600" />
+                    <span>Nouvelle boutique</span>
+                  </button>
+                )}
 
                 <button
                   onClick={() => {
@@ -208,11 +223,16 @@ export function Header({
           <button
             id="header-user-avatar-btn"
             onClick={() => setUserMenuOpen(!userMenuOpen)}
-            className="flex items-center gap-2 px-3 py-2 rounded-2xl hover:bg-[#F6F6F3] transition-colors"
+            className="flex items-center gap-2 px-2 py-1.5 rounded-2xl hover:bg-[#F6F6F3] transition-colors"
           >
             <div className="w-9 h-9 rounded-2xl bg-[#FFD43B] text-[#171717] flex items-center justify-center font-black text-sm ring-2 ring-[#FFD43B]">
               {(user?.fullName || '?').charAt(0).toUpperCase()}
             </div>
+            {effectiveRole && (
+              <span className="hidden sm:inline-block px-2 py-1 rounded-full bg-[#171717] text-white text-[10px] font-bold tracking-wide">
+                {ROLE_LABELS[effectiveRole]}
+              </span>
+            )}
           </button>
 
           <AnimatePresence>
@@ -227,6 +247,11 @@ export function Header({
                 <div className="px-3 py-2 border-b border-stone-100 mb-1">
                   <p className="text-xs font-extrabold text-[#171717]">{user?.fullName}</p>
                   <p className="text-[10px] text-[#777777]">{user?.email}</p>
+                  {effectiveRole && (
+                    <span className="inline-block mt-1.5 px-2 py-0.5 rounded-full bg-[#FFF4BF] text-[#171717] text-[10px] font-bold">
+                      {ROLE_LABELS[effectiveRole]}
+                    </span>
+                  )}
                 </div>
 
                 <button
