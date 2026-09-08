@@ -1,8 +1,8 @@
 # Mercato — Frontend
 
-Application React (Vite) pour GesVente : caisse, catalogue produits avec QR code, stock et gestion d'équipe pour des boutiques multi-magasins. Installable en PWA sur mobile. Consomme l'API décrite dans [`../backend/README.md`](../backend/README.md).
+Application React (Vite) pour GesVente : caisse, catalogue produits avec QR code, stock et gestion d'équipe pour des boutiques multi-magasins. Installable en PWA sur mobile. Consomme l'API décrite dans le README du dépôt backend **GesVente** (dépôt séparé).
 
-Pour la vue d'ensemble du projet (les deux rôles, les deux apps) voir le [README racine](../README.md). Ce document couvre uniquement le frontend : comment il est organisé et comment chaque écran fonctionne.
+Pour la vue d'ensemble du projet (les deux rôles, les deux apps) voir [docs/PROJET.md](docs/PROJET.md). Ce document couvre uniquement le frontend : comment il est organisé et comment chaque écran fonctionne.
 
 ## Stack
 
@@ -18,7 +18,7 @@ npm run lint     # tsc --noEmit
 npm run preview  # sert le build de production
 ```
 
-Le backend (voir `../backend`) doit tourner sur le port 3001. Aucune configuration n'est requise en local : `lib/apiClient.ts` déduit l'hôte de l'API à partir de celui de la page (`window.location.hostname`), donc `localhost:3000` parle à `localhost:3001`, et `192.168.x.x:3000` (accès mobile) parle à `192.168.x.x:3001` automatiquement. Ne définir `VITE_API_BASE_URL` (voir `.env.example`) que pour un déploiement où frontend et backend sont sur des domaines différents.
+Le backend (dépôt séparé **GesVente**) doit tourner sur le port 3001. Aucune configuration n'est requise en local : `lib/apiClient.ts` déduit l'hôte de l'API à partir de celui de la page (`window.location.hostname`), donc `localhost:3000` parle à `localhost:3001`, et `192.168.x.x:3000` (accès mobile) parle à `192.168.x.x:3001` automatiquement. Ne définir `VITE_API_BASE_URL` (voir `.env.example`) que pour un déploiement où frontend et backend sont sur des domaines différents.
 
 ## Comment l'app démarre (`App.tsx`)
 
@@ -65,7 +65,7 @@ Points concrets gérés ainsi :
 
 ## Équipe (`components/settings/TeamSection.tsx`)
 
-Formulaire "Nom complet + Email + Rôle" → `POST /shops/:id/members`. Si le compte n'existait pas encore côté serveur, la réponse contient `temporaryPassword` : affiché une seule fois dans une bannière noire/or avec bouton "Copier", à transmettre à la personne. Voir [README racine](../README.md#comment-un-compte-de-chaque-rôle-est-créé) pour le détail du mécanisme.
+Formulaire "Nom complet + Email + Rôle" → `POST /shops/:id/members`. Si le compte n'existait pas encore côté serveur, la réponse contient `temporaryPassword` : affiché une seule fois dans une bannière noire/or avec bouton "Copier", à transmettre à la personne. Voir [docs/PROJET.md](docs/PROJET.md#comment-un-compte-de-chaque-rôle-est-créé) pour le détail du mécanisme.
 
 ## Couche données (`lib/`)
 
@@ -76,7 +76,7 @@ Formulaire "Nom complet + Email + Rôle" → `POST /shops/:id/members`. Si le co
 
 ## PWA
 
-Voir [README racine](../README.md#pwa-installation-mobile). Config dans `vite.config.ts` (`VitePWA`) : manifeste `name`/`icons`/`theme_color` (`#FFD43B`, or) / `background_color` (`#171717`, noir). `components/ui/InstallPwaPrompt.tsx` gère la bannière (Android via `beforeinstallprompt`, iOS via instruction manuelle "Ajouter à l'écran d'accueil" — iOS Safari ignore le manifeste).
+Voir [docs/PROJET.md](docs/PROJET.md#pwa-installation-mobile). Config dans `vite.config.ts` (`VitePWA`) : manifeste `name`/`icons`/`theme_color` (`#FFD43B`, or) / `background_color` (`#171717`, noir). `components/ui/InstallPwaPrompt.tsx` gère la bannière (Android via `beforeinstallprompt`, iOS via instruction manuelle "Ajouter à l'écran d'accueil" — iOS Safari ignore le manifeste).
 
 ## Structure
 
@@ -108,5 +108,5 @@ src/app/
 
 ## Limites connues
 
-- Pas de route `/admin` : aucune interface pour les endpoints `/admin/*` du backend (voir [README racine](../README.md#limites-connues--pas-encore-fait)).
+- Pas de route `/admin` : aucune interface pour les endpoints `/admin/*` du backend (voir [docs/PROJET.md](docs/PROJET.md#limites-connues--pas-encore-fait)).
 - Sur mobile, le bouton "Plus" de la barre de navigation basse ouvre la palette de commandes (recherche), pas un menu complet — "Paramètres" n'est donc pas atteignable depuis le bas de l'écran sur mobile pour l'instant.
