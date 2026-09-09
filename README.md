@@ -106,6 +106,33 @@ src/app/
   utils/formatters.ts        formatCurrency, getStatusBadge, etc.
 ```
 
+## Déploiement (Render)
+
+`render.yaml` à la racine décrit un site statique : Render Dashboard → **New** → **Blueprint**, pointer sur ce dépôt.
+
+### La seule variable à fournir
+
+`VITE_API_BASE_URL` = l'URL publique de l'API, **sans slash final** (ex. `https://gesvente-backend.onrender.com`).
+
+Deux choses à savoir sur elle :
+
+- **Elle est inlinée au build, pas lue à l'exécution.** Vite remplace `import.meta.env.VITE_API_BASE_URL` par sa valeur littérale dans le bundle. La modifier dans le dashboard n'a aucun effet tant qu'on n'a pas relancé un déploiement — un simple restart ne suffit pas.
+- **Elle finit dans du JavaScript public.** Aucune variable `VITE_*` n'est un secret : n'y mettre que ce qui peut être lu par n'importe quel visiteur.
+
+Sans elle, `lib/apiClient.ts` se rabat sur `<hôte-de-la-page>:3001` — utile en dev pour joindre l'API depuis un téléphone du réseau local, inutilisable sur Render qui n'expose que le port 443.
+
+### Côté backend, en miroir
+
+Le backend n'autorise que les origines listées dans son `CORS_ORIGINS`. Après le premier déploiement du frontend, y reporter son URL (`https://<ce-service>.onrender.com`, sans slash final), sinon le navigateur bloque chaque appel — l'app se charge mais reste vide, sans erreur visible côté serveur.
+
+Les deux services se pointent donc mutuellement : c'est normal de déployer une première fois, récupérer les URL, puis compléter les deux variables.
+
+### Ce que le blueprint règle d'autre
+
+- `npm ci --include=dev` : `vite` et `@vitejs/plugin-react` sont des devDependencies ; sans ce drapeau un `NODE_ENV=production` les ferait sauter et le build échouerait.
+- Un *rewrite* `/*` → `/index.html`. L'app ne fait aucun routing par URL, mais ça évite un 404 sur un rechargement profond ou un raccourci PWA pointant ailleurs que sur `/`.
+- `Cache-Control: no-store` sur `sw.js` et `registerSW.js`. C'est le point non évident de la PWA : `registerType: 'autoUpdate'` ne peut pas mettre à jour l'app si le navigateur sert un ancien service worker depuis son cache HTTP. Sans cet en-tête, des visiteurs restent bloqués sur une version périmée après un déploiement.
+
 ## Limites connues
 
 - Pas de route `/admin` : aucune interface pour les endpoints `/admin/*` du backend (voir [docs/PROJET.md](docs/PROJET.md#limites-connues--pas-encore-fait)).

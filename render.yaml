@@ -1,0 +1,50 @@
+# Blueprint Render — Mercato (React + Vite, site statique PWA)
+#
+# Deployer : Render Dashboard > New > Blueprint, pointer sur ce depot.
+# Ne jamais committer de secret ici (un build Vite inline de toute facon
+# toute variable VITE_* dans le bundle public : n'y mettre que du public).
+
+services:
+  - type: web
+    name: mercato-frontend
+    runtime: static
+    branch: main
+
+    # --include=dev est indispensable : vite et @vitejs/plugin-react sont des
+    # devDependencies, et NODE_ENV=production ferait sauter ces paquets.
+    buildCommand: npm ci --include=dev && npm run build
+    staticPublishPath: ./dist
+
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+
+      # URL publique de l'API, SANS slash final.
+      # Ex: https://gesvente-backend.onrender.com
+      # Vite inline cette valeur AU BUILD : la changer impose un redeploiement,
+      # pas un simple restart. Sans elle, apiClient.ts se rabat sur
+      # `<host-de-la-page>:3001`, un port que Render n'expose pas.
+      - key: VITE_API_BASE_URL
+        sync: false
+
+    routes:
+      # SPA : l'app ne fait aucun routing par URL, mais ce rewrite evite un 404
+      # sur un rechargement profond ou un raccourci PWA sur autre chose que /.
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+    headers:
+      # Le service worker doit etre revalide a chaque chargement, sinon un
+      # ancien sw.js en cache continue de servir l'ancienne app apres un
+      # deploiement (registerType: 'autoUpdate' ne peut rien contre ca).
+      - path: /sw.js
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+      - path: /registerSW.js
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+      # Le manifeste change rarement mais doit suivre un renommage d'icones.
+      - path: /manifest.webmanifest
+        name: Cache-Control
+        value: no-cache
