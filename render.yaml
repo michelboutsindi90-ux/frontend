@@ -20,12 +20,13 @@ services:
         value: "24"
 
       # URL publique de l'API, SANS slash final.
-      # Ex: https://gesvente-backend.onrender.com
-      # Vite inline cette valeur AU BUILD : la changer impose un redeploiement,
-      # pas un simple restart. Sans elle, apiClient.ts se rabat sur
+      # Ce n'est pas un secret (Vite l'inline dans le bundle public), donc
+      # elle est versionnee ici plutot que saisie a chaque deploiement.
+      # Vite l'inline AU BUILD : la changer impose un redeploiement, pas un
+      # simple restart. Sans elle, apiClient.ts se rabat sur
       # `<host-de-la-page>:3001`, un port que Render n'expose pas.
       - key: VITE_API_BASE_URL
-        sync: false
+        value: https://backend-lskt.onrender.com
 
     routes:
       # SPA : l'app ne fait aucun routing par URL, mais ce rewrite evite un 404

@@ -112,7 +112,9 @@ src/app/
 
 ### La seule variable à fournir
 
-`VITE_API_BASE_URL` = l'URL publique de l'API, **sans slash final** (ex. `https://gesvente-backend.onrender.com`).
+`VITE_API_BASE_URL` = l'URL publique de l'API, **sans slash final**. Pour le déploiement actuel : `https://backend-lskt.onrender.com`.
+
+Elle n'est pas un secret — Vite l'inline dans le bundle public — donc `render.yaml` la porte directement, sans saisie au déploiement.
 
 Deux choses à savoir sur elle :
 
