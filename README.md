@@ -106,11 +106,16 @@ src/app/
   utils/formatters.ts        formatCurrency, getStatusBadge, etc.
 ```
 
-## Déploiement (Render)
+## Déploiement
 
-`render.yaml` à la racine décrit un site statique : Render Dashboard → **New** → **Blueprint**, pointer sur ce dépôt.
+Le frontend est déployé sur **Vercel** — `vercel.json` porte sa configuration. `render.yaml` est conservé comme alternative si tu bascules un jour sur Render (blueprint pour site statique, même build, mêmes en-têtes).
 
-### La seule variable à fournir
+### Ce que règle `vercel.json`
+
+- Un *rewrite* `/(.*)` → `/index.html`. Les fichiers réellement présents ont priorité, donc les assets ne sont pas affectés ; ça évite un 404 sur un rechargement profond ou un raccourci PWA pointant ailleurs que sur `/`.
+- `Cache-Control: no-store` sur `sw.js` et `registerSW.js`. C'est le point non évident de la PWA : `registerType: 'autoUpdate'` ne peut pas mettre à jour l'app si le navigateur sert un ancien service worker depuis son cache HTTP. Sans cet en-tête, des visiteurs restent bloqués sur une version périmée après un déploiement.
+
+### La variable à fournir (Vercel : Settings → Environment Variables)
 
 `VITE_API_BASE_URL` = l'URL publique de l'API, **sans slash final**. Pour le déploiement actuel : `https://backend-lskt.onrender.com`.
 
@@ -125,15 +130,21 @@ Sans elle, `lib/apiClient.ts` se rabat sur `<hôte-de-la-page>:3001` — utile e
 
 ### Côté backend, en miroir
 
-Le backend n'autorise que les origines listées dans son `CORS_ORIGINS`. Après le premier déploiement du frontend, y reporter son URL (`https://<ce-service>.onrender.com`, sans slash final), sinon le navigateur bloque chaque appel — l'app se charge mais reste vide, sans erreur visible côté serveur.
+Le backend n'autorise que les origines listées dans son `CORS_ORIGINS`. Il faut y reporter l'URL Vercel du frontend, **sans slash final**, sinon le navigateur bloque chaque appel :
+
+```
+Access to fetch at 'https://backend-lskt.onrender.com/auth/register'
+from origin 'https://frontend-gamma-five-32.vercel.app' has been blocked
+by CORS policy: No 'Access-Control-Allow-Origin' header is present.
+```
+
+Cette variable se règle dans **Environment** du service backend sur Render, pas ici. Plusieurs origines se séparent par des virgules — garder `http://localhost:3000` en plus permet de faire tourner le frontend en local contre l'API de production.
 
 Les deux services se pointent donc mutuellement : c'est normal de déployer une première fois, récupérer les URL, puis compléter les deux variables.
 
-### Ce que le blueprint règle d'autre
+### Sur Render, si tu bascules
 
-- `npm ci --include=dev` : `vite` et `@vitejs/plugin-react` sont des devDependencies ; sans ce drapeau un `NODE_ENV=production` les ferait sauter et le build échouerait.
-- Un *rewrite* `/*` → `/index.html`. L'app ne fait aucun routing par URL, mais ça évite un 404 sur un rechargement profond ou un raccourci PWA pointant ailleurs que sur `/`.
-- `Cache-Control: no-store` sur `sw.js` et `registerSW.js`. C'est le point non évident de la PWA : `registerType: 'autoUpdate'` ne peut pas mettre à jour l'app si le navigateur sert un ancien service worker depuis son cache HTTP. Sans cet en-tête, des visiteurs restent bloqués sur une version périmée après un déploiement.
+`render.yaml` ajoute une chose que Vercel gère seul : `npm ci --include=dev`. `vite` et `@vitejs/plugin-react` sont des devDependencies, et un `NODE_ENV=production` les ferait sauter — le build échouerait sur `vite: not found`.
 
 ## Limites connues
 
