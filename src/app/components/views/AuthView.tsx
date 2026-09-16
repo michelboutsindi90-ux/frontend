@@ -127,7 +127,7 @@ export function AuthView({ initialMode = 'login' }: AuthViewProps) {
               Pilotez votre boutique en temps réel.
             </h1>
             <p className="text-zinc-400 text-sm leading-relaxed max-w-md">
-              Stock, catalogue et encaissement en caisse — tout au même endroit.
+              Stock, catalogue et encaissement en caisse - tout au même endroit.
             </p>
           </div>
 

@@ -116,7 +116,7 @@ export function AddProductModal({
                   </div>
                   <div>
                     <h2 className="text-lg font-extrabold text-[#171717] tracking-tight">Produit enregistré !</h2>
-                    <p className="text-xs text-[#777777]">Voici son QR code — à coller sur l'article.</p>
+                    <p className="text-xs text-[#777777]">Voici son QR code à coller sur l'article.</p>
                   </div>
                 </div>
                 <button
