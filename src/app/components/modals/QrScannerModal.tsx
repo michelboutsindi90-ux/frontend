@@ -80,14 +80,14 @@ export function QrScannerModal({ isOpen, onClose, onDecoded }: QrScannerModalPro
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex justify-center sm:p-4 bg-black/70 backdrop-blur-sm overflow-y-auto overscroll-contain">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-stone-200 overflow-hidden"
+          className="w-full max-w-md bg-white mt-auto sm:my-auto rounded-t-3xl sm:rounded-3xl max-h-[92dvh] sm:max-h-none overflow-y-auto sm:overflow-hidden pb-[env(safe-area-inset-bottom)] sm:pb-0 shadow-2xl border border-stone-200"
         >
-          <div className="px-6 py-4 border-b border-stone-100 flex items-center justify-between bg-[#FBFBFA]">
+          <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-stone-100 flex items-center justify-between gap-3 bg-[#FBFBFA]">
             <div className="flex items-center gap-2">
               <ScanLine size={18} className="text-[#171717]" />
               <h3 className="text-sm font-extrabold text-[#171717]">Scanner un QR code produit</h3>
@@ -97,7 +97,7 @@ export function QrScannerModal({ isOpen, onClose, onDecoded }: QrScannerModalPro
             </button>
           </div>
 
-          <div className="relative aspect-square bg-black">
+          <div className="relative aspect-square max-h-[65dvh] mx-auto w-full bg-black">
             <video ref={videoRef} className="w-full h-full object-cover" muted playsInline />
             <canvas ref={canvasRef} className="hidden" />
 

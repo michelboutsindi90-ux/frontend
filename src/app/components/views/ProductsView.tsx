@@ -57,23 +57,25 @@ export function ProductsView({
   }
 
   return (
-    <div id="products-view" className="space-y-6 pb-16">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div id="products-view" className="space-y-4 sm:space-y-6 pb-6 md:pb-16">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-2xl font-display font-bold text-[#171717] tracking-tight">Catalogue Produits</h1>
+          <h1 className="text-xl sm:text-2xl font-display font-bold text-[#171717] tracking-tight">Catalogue Produits</h1>
           <p className="text-xs text-[#777777] mt-0.5">Gérez vos articles, leur prix et leur catégorie.</p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="bg-[#F6F6F3] p-1 rounded-2xl flex items-center">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="bg-[#F6F6F3] p-1 rounded-2xl flex items-center shrink-0">
             <button
               onClick={() => setViewMode('grid')}
+              aria-label="Vue grille"
               className={`p-2 rounded-xl transition-all ${viewMode === 'grid' ? 'bg-white text-[#171717] shadow-xs font-bold' : 'text-stone-500 hover:text-stone-900'}`}
             >
               <LayoutGrid size={16} />
             </button>
             <button
               onClick={() => setViewMode('table')}
+              aria-label="Vue liste"
               className={`p-2 rounded-xl transition-all ${viewMode === 'table' ? 'bg-white text-[#171717] shadow-xs font-bold' : 'text-stone-500 hover:text-stone-900'}`}
             >
               <List size={16} />
@@ -86,7 +88,7 @@ export function ProductsView({
               onClick={onOpenAddModal}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#FFD43B] text-[#171717] font-bold text-xs shadow-md shadow-[#FFD43B]/30 hover:brightness-105 transition-all"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-[#FFD43B] text-[#171717] font-bold text-xs shadow-md shadow-[#FFD43B]/30 hover:brightness-105 transition-all"
             >
               <Plus size={16} className="stroke-[2.5]" />
               <span>Ajouter un produit</span>
@@ -95,10 +97,10 @@ export function ProductsView({
         </div>
       </div>
 
-      <div className="p-4 rounded-3xl bg-white border border-stone-200/80 shadow-[0_4px_20px_rgba(0,0,0,0.02)] space-y-3">
-        <div className="flex flex-col md:flex-row items-center gap-3">
-          <div className="relative flex-1 w-full">
-            <Search size={16} className="absolute left-3.5 top-3 text-[#777777]" />
+      <div className="p-3 sm:p-4 rounded-3xl bg-white border border-stone-200/80 shadow-[0_4px_20px_rgba(0,0,0,0.02)] space-y-3">
+        <div className="grid grid-cols-2 md:flex md:flex-row items-center gap-2 sm:gap-3">
+          <div className="relative flex-1 w-full col-span-2">
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#777777] pointer-events-none" />
             <input
               type="text"
               value={search}
@@ -111,7 +113,7 @@ export function ProductsView({
           <select
             value={selectedStockStatus}
             onChange={(e) => setSelectedStockStatus(e.target.value)}
-            className="w-full md:w-44 px-3 py-2 rounded-2xl bg-[#F6F6F3] border border-transparent focus:border-[#FFD43B] focus:bg-white text-xs font-semibold text-stone-700 outline-none"
+            className="w-full min-w-0 md:w-44 px-3 py-2 rounded-2xl bg-[#F6F6F3] border border-transparent focus:border-[#FFD43B] focus:bg-white text-xs font-semibold text-stone-700 outline-none"
           >
             <option value="all">Tous les stocks</option>
             <option value="in_stock">En stock</option>
@@ -122,7 +124,7 @@ export function ProductsView({
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as ProductSortOption)}
-            className="w-full md:w-48 px-3 py-2 rounded-2xl bg-[#F6F6F3] border border-transparent focus:border-[#FFD43B] focus:bg-white text-xs font-semibold text-stone-700 outline-none"
+            className="w-full min-w-0 md:w-48 px-3 py-2 rounded-2xl bg-[#F6F6F3] border border-transparent focus:border-[#FFD43B] focus:bg-white text-xs font-semibold text-stone-700 outline-none"
           >
             <option value="name">Tri : Nom (A-Z)</option>
             <option value="price_asc">Prix : Croissant</option>
@@ -131,10 +133,10 @@ export function ProductsView({
           </select>
         </div>
 
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar -mx-3 px-3 sm:mx-0 sm:px-0">
           <button
             onClick={() => setSelectedCategoryId('all')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+            className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold whitespace-nowrap shrink-0 transition-all ${
               selectedCategoryId === 'all' ? 'bg-[#171717] text-white shadow-xs' : 'bg-[#F6F6F3] text-stone-600 hover:bg-stone-200'
             }`}
           >
@@ -144,7 +146,7 @@ export function ProductsView({
             <button
               key={cat.id}
               onClick={() => setSelectedCategoryId(cat.id)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+              className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold whitespace-nowrap shrink-0 transition-all ${
                 selectedCategoryId === cat.id ? 'bg-[#171717] text-white shadow-xs' : 'bg-[#F6F6F3] text-stone-600 hover:bg-stone-200'
               }`}
             >
@@ -155,7 +157,7 @@ export function ProductsView({
       </div>
 
       {viewMode === 'grid' && (
-        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <motion.div layout className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5">
           <AnimatePresence>
             {filteredProducts.map((product) => {
               const status = getStockStatus(product.stock?.quantity ?? 0, product.stock?.lowStockAlert ?? 0)
@@ -171,33 +173,33 @@ export function ProductsView({
                   whileHover={{ y: -5, transition: { duration: 0.2 } }}
                   key={product.id}
                   onClick={() => onSelectProduct(product)}
-                  className="rounded-3xl bg-white border border-stone-200/80 overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-stone-300 transition-all cursor-pointer flex flex-col justify-between group"
+                  className="min-w-0 rounded-2xl sm:rounded-3xl bg-white border border-stone-200/80 overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-stone-300 transition-all cursor-pointer flex flex-col justify-between group"
                 >
-                  <div className="p-5">
-                    <div className="flex items-center justify-between text-[11px] text-stone-400 font-bold uppercase tracking-wider mb-2">
-                      <span>{product.category?.name || '—'}</span>
+                  <div className="p-3 sm:p-5">
+                    <div className="flex flex-wrap items-center justify-between gap-1 text-[10px] sm:text-[11px] text-stone-400 font-bold uppercase tracking-wider mb-2">
+                      <span className="truncate max-w-full">{product.category?.name || '—'}</span>
                       <span
-                        className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-extrabold border ${badge.bg}`}
+                        className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-extrabold border whitespace-nowrap ${badge.bg}`}
                       >
                         <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />
                         {badge.label}
                       </span>
                     </div>
 
-                    <div className="w-full aspect-4/3 rounded-2xl bg-[#F6F6F3] flex items-center justify-center mb-3">
+                    <div className="w-full aspect-[16/9] sm:aspect-4/3 rounded-xl sm:rounded-2xl bg-[#F6F6F3] flex items-center justify-center mb-2 sm:mb-3">
                       <Package size={28} className="text-stone-300" />
                     </div>
 
-                    <h3 className="font-extrabold text-sm text-[#171717] line-clamp-1 group-hover:text-stone-900">{product.name}</h3>
-                    <p className="text-[11px] text-stone-400 font-mono mt-0.5">SKU: {product.sku}</p>
+                    <h3 className="font-extrabold text-xs sm:text-sm text-[#171717] line-clamp-1 group-hover:text-stone-900">{product.name}</h3>
+                    <p className="text-[10px] sm:text-[11px] text-stone-400 font-mono mt-0.5 truncate">SKU: {product.sku}</p>
 
-                    <div className="mt-3 flex items-baseline justify-between">
-                      <div>
-                        <p className="text-xs text-stone-400">Prix de vente</p>
-                        <p className="text-base font-black text-[#171717]">{formatCurrency(product.price)}</p>
+                    <div className="mt-2 sm:mt-3 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+                      <div className="min-w-0">
+                        <p className="text-xs text-stone-400 hidden sm:block">Prix de vente</p>
+                        <p className="text-sm sm:text-base font-black text-[#171717] truncate">{formatCurrency(product.price)}</p>
                       </div>
-                      <div className="text-right">
-                        <p className="text-xs text-stone-400">Stock</p>
+                      <div className="sm:text-right">
+                        <p className="text-xs text-stone-400 hidden sm:block">Stock</p>
                         <p className={`text-xs font-black ${status !== 'in_stock' ? 'text-amber-700' : 'text-[#171717]'}`}>
                           {product.stock?.quantity ?? 0} unités
                         </p>
@@ -205,14 +207,14 @@ export function ProductsView({
                     </div>
                   </div>
 
-                  <div className="px-5 py-3 border-t border-stone-100 bg-[#FBFBFA] flex items-center justify-end gap-1.5">
+                  <div className="px-3 sm:px-5 py-2 sm:py-3 border-t border-stone-100 bg-[#FBFBFA] flex items-center justify-end gap-1.5">
                     {status !== 'in_stock' && canManage && (
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
                           onReplenishProduct(product)
                         }}
-                        className="px-2 py-1 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-[10px] font-bold transition-colors"
+                        className="px-2.5 py-1.5 sm:px-2 sm:py-1 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-[10px] font-bold transition-colors"
                       >
                         Réassort
                       </button>
@@ -222,7 +224,8 @@ export function ProductsView({
                         e.stopPropagation()
                         onSelectProduct(product)
                       }}
-                      className="p-1.5 rounded-xl bg-white border border-stone-200 hover:bg-[#FFD43B] text-stone-700 hover:text-[#171717] transition-colors"
+                      aria-label="Modifier"
+                      className="p-2 sm:p-1.5 rounded-xl bg-white border border-stone-200 hover:bg-[#FFD43B] text-stone-700 hover:text-[#171717] transition-colors"
                     >
                       <Edit3 size={13} />
                     </button>
@@ -234,8 +237,56 @@ export function ProductsView({
         </motion.div>
       )}
 
+      {viewMode === 'table' && filteredProducts.length > 0 && (
+        <div className="md:hidden bg-white rounded-3xl border border-stone-200/80 divide-y divide-stone-100 overflow-hidden">
+          {filteredProducts.map((p) => {
+            const status = getStockStatus(p.stock?.quantity ?? 0, p.stock?.lowStockAlert ?? 0)
+            const badge = getStatusBadge(status)
+            return (
+              <div
+                key={p.id}
+                onClick={() => onSelectProduct(p)}
+                className="p-3.5 flex items-center gap-3 active:bg-[#FBFBFA] cursor-pointer"
+              >
+                <div className="w-10 h-10 rounded-xl bg-[#F6F6F3] flex items-center justify-center shrink-0">
+                  <Package size={16} className="text-stone-400" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold text-[#171717] truncate">{p.name}</p>
+                  <p className="text-[11px] text-stone-400 truncate">
+                    {p.category?.name || '—'} · <span className="font-mono">{p.sku}</span>
+                  </p>
+                  <span className={`mt-1 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border ${badge.bg}`}>
+                    <span className={`w-1 h-1 rounded-full ${badge.dot}`} />
+                    {badge.label}
+                  </span>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="text-xs font-black text-[#171717] whitespace-nowrap">{formatCurrency(p.price)}</p>
+                  <p className={`text-[11px] font-bold whitespace-nowrap ${status !== 'in_stock' ? 'text-amber-700' : 'text-stone-500'}`}>
+                    {p.stock?.quantity ?? 0} pcs
+                  </p>
+                </div>
+                {canManage && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDelete(p.id)
+                    }}
+                    aria-label="Supprimer"
+                    className="p-2 -mr-1 rounded-xl text-stone-400 hover:bg-rose-100 hover:text-rose-700 transition-colors shrink-0"
+                  >
+                    <Trash2 size={15} />
+                  </button>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
+
       {viewMode === 'table' && (
-        <div className="bg-white rounded-3xl border border-stone-200/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)] overflow-hidden">
+        <div className="hidden md:block bg-white rounded-3xl border border-stone-200/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs min-w-[700px]">
               <thead>
@@ -303,7 +354,7 @@ export function ProductsView({
       )}
 
       {filteredProducts.length === 0 && (
-        <div className="text-center py-20 bg-white rounded-3xl border border-stone-200 p-8">
+        <div className="text-center py-12 sm:py-20 bg-white rounded-3xl border border-stone-200 p-6 sm:p-8">
           <Package size={40} className="mx-auto text-stone-300 mb-3" />
           <h3 className="text-base font-extrabold text-[#171717]">Aucun produit trouvé</h3>
           <p className="text-xs text-stone-500 mt-1 max-w-sm mx-auto">

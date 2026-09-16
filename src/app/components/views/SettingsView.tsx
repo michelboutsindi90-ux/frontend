@@ -78,15 +78,15 @@ export function SettingsView() {
   }
 
   return (
-    <div id="settings-view" className="space-y-6 pb-16 max-w-4xl">
+    <div id="settings-view" className="space-y-4 sm:space-y-6 pb-6 md:pb-16 max-w-4xl">
       <div>
-        <h1 className="text-2xl font-display font-bold text-[#171717] tracking-tight">Paramètres de la Boutique</h1>
+        <h1 className="text-xl sm:text-2xl font-display font-bold text-[#171717] tracking-tight">Paramètres de la Boutique</h1>
         <p className="text-xs text-[#777777] mt-0.5">Identité de la boutique et gestion de l'équipe.</p>
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
         <fieldset disabled={!isOwner} className="space-y-6 disabled:opacity-60">
-          <div className="p-6 md:p-8 rounded-3xl bg-white border border-stone-200/80 shadow-2xs space-y-6">
+          <div className="p-4 sm:p-6 md:p-8 rounded-3xl bg-white border border-stone-200/80 shadow-2xs space-y-6">
             <div className="flex items-center gap-3 pb-4 border-b border-stone-100">
               <div className="w-10 h-10 rounded-2xl bg-[#FFF4BF] text-[#171717] flex items-center justify-center">
                 <Store size={20} />
@@ -246,8 +246,8 @@ export function SettingsView() {
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#FBFBFA] border border-stone-200 flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
+            <div className="p-4 rounded-2xl bg-[#FBFBFA] border border-stone-200 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 min-w-0">
                 <Power size={16} className="text-stone-500" />
                 <div>
                   <p className="font-extrabold text-xs text-[#171717]">Boutique active</p>
@@ -258,21 +258,21 @@ export function SettingsView() {
                 type="checkbox"
                 checked={isActive}
                 onChange={(e) => setIsActive(e.target.checked)}
-                className="w-5 h-5 accent-[#FFD43B] rounded cursor-pointer"
+                className="w-5 h-5 shrink-0 accent-[#FFD43B] rounded cursor-pointer"
               />
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-4 pt-2">
+          <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3 sm:gap-4 pt-2">
             {isSaved && (
-              <span className="text-xs font-bold text-emerald-600 flex items-center gap-1.5">
+              <span className="text-xs font-bold text-emerald-600 flex items-center justify-center gap-1.5">
                 <CheckCircle2 size={16} /> Modifications enregistrées !
               </span>
             )}
             <button
               type="submit"
               disabled={isSaving}
-              className="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[#FFD43B] text-[#171717] font-black text-xs shadow-lg shadow-[#FFD43B]/40 hover:brightness-105 transition-all disabled:opacity-60"
+              className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl bg-[#FFD43B] text-[#171717] font-black text-xs shadow-lg shadow-[#FFD43B]/40 hover:brightness-105 transition-all disabled:opacity-60"
             >
               <Save size={16} />
               <span>{isSaving ? 'Enregistrement...' : 'Enregistrer les paramètres'}</span>

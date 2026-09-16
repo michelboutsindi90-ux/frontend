@@ -48,30 +48,30 @@ export function ReplenishModal({ product, isOpen, onClose, shopId, onAdjusted }:
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex justify-center sm:p-4 bg-black/40 backdrop-blur-sm overflow-y-auto overscroll-contain">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.2 }}
-          className="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-stone-200 overflow-hidden"
+          className="w-full max-w-lg bg-white mt-auto sm:my-auto rounded-t-3xl sm:rounded-3xl max-h-[92dvh] sm:max-h-none overflow-y-auto sm:overflow-hidden pb-[env(safe-area-inset-bottom)] sm:pb-0 shadow-2xl border border-stone-200"
         >
-          <div className="px-6 py-5 border-b border-stone-100 flex items-center justify-between bg-[#FBFBFA]">
-            <div className="flex items-center gap-3">
+          <div className="px-5 sm:px-6 py-4 sm:py-5 border-b border-stone-100 flex items-center justify-between gap-3 bg-[#FBFBFA]">
+            <div className="flex items-center gap-3 min-w-0">
               <div className="w-10 h-10 rounded-2xl bg-[#FFD43B] flex items-center justify-center text-[#171717]">
                 <Boxes size={20} />
               </div>
               <div>
                 <h3 className="text-base font-extrabold text-[#171717]">Ajuster le stock</h3>
-                <p className="text-xs text-stone-500">{product.name}</p>
+                <p className="text-xs text-stone-500 truncate">{product.name}</p>
               </div>
             </div>
-            <button onClick={onClose} className="w-8 h-8 rounded-xl bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-600">
+            <button onClick={onClose} className="w-8 h-8 shrink-0 rounded-xl bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-600">
               <X size={16} />
             </button>
           </div>
 
-          <div className="p-6 space-y-6">
+          <div className="p-5 sm:p-6 space-y-5 sm:space-y-6">
             {errorMessage && (
               <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
                 {errorMessage}
@@ -106,7 +106,7 @@ export function ReplenishModal({ product, isOpen, onClose, shopId, onAdjusted }:
                 <button
                   type="button"
                   onClick={() => setQuantity(quantity - 1)}
-                  className="w-10 h-10 rounded-2xl bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-stone-700"
+                  className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 rounded-2xl bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-stone-700"
                 >
                   <Minus size={16} />
                 </button>
@@ -114,12 +114,12 @@ export function ReplenishModal({ product, isOpen, onClose, shopId, onAdjusted }:
                   type="number"
                   value={quantity}
                   onChange={(e) => setQuantity(Number(e.target.value))}
-                  className="w-24 text-center font-black text-2xl text-[#171717] bg-transparent outline-none"
+                  className="w-20 sm:w-24 min-w-0 text-center font-black text-2xl text-[#171717] bg-transparent outline-none"
                 />
                 <button
                   type="button"
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-10 h-10 rounded-2xl bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-stone-700"
+                  className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 rounded-2xl bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-stone-700"
                 >
                   <Plus size={16} />
                 </button>
@@ -134,7 +134,7 @@ export function ReplenishModal({ product, isOpen, onClose, shopId, onAdjusted }:
                 type="button"
                 disabled={isSubmitting || quantity === 0}
                 onClick={handleConfirm}
-                className="flex items-center gap-2 px-6 py-2.5 rounded-2xl bg-[#FFD43B] text-[#171717] font-extrabold text-xs shadow-md shadow-[#FFD43B]/30 hover:brightness-105 disabled:opacity-60"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl bg-[#FFD43B] text-[#171717] font-extrabold text-xs shadow-md shadow-[#FFD43B]/30 hover:brightness-105 disabled:opacity-60"
               >
                 {isSubmitting ? <span>Validation...</span> : (<><Check size={16} /><span>Confirmer</span></>)}
               </button>

@@ -99,17 +99,17 @@ export function AddProductModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex justify-center sm:p-4 bg-black/40 backdrop-blur-sm overflow-y-auto overscroll-contain">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.2 }}
-          className="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-stone-200 overflow-hidden my-8"
+          className="w-full max-w-lg bg-white mt-auto sm:my-auto rounded-t-3xl sm:rounded-3xl max-h-[92dvh] sm:max-h-none overflow-y-auto sm:overflow-hidden pb-[env(safe-area-inset-bottom)] sm:pb-0 shadow-2xl border border-stone-200"
         >
           {createdProduct ? (
             <>
-              <div className="px-6 py-5 border-b border-stone-100 flex items-center justify-between bg-[#FBFBFA]">
+              <div className="px-5 sm:px-6 py-4 sm:py-5 border-b border-stone-100 flex items-center justify-between gap-3 bg-[#FBFBFA]">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-2xl bg-emerald-500 flex items-center justify-center text-white">
                     <Check size={20} className="stroke-[3]" />
@@ -127,7 +127,7 @@ export function AddProductModal({
                 </button>
               </div>
 
-              <div className="p-6 space-y-5">
+              <div className="p-5 sm:p-6 space-y-5">
                 <div className="aspect-square max-w-[220px] mx-auto rounded-3xl overflow-hidden bg-[#F6F6F3] border border-stone-200/80 flex items-center justify-center shadow-inner">
                   {createdQrUrl ? (
                     <img src={createdQrUrl} alt={`QR code ${createdProduct.name}`} className="w-3/4 h-3/4 object-contain" />
@@ -163,7 +163,7 @@ export function AddProductModal({
             </>
           ) : (
             <>
-          <div className="px-6 py-5 border-b border-stone-100 flex items-center justify-between bg-[#FBFBFA]">
+          <div className="px-5 sm:px-6 py-4 sm:py-5 border-b border-stone-100 flex items-center justify-between gap-3 bg-[#FBFBFA]">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-[#FFD43B] flex items-center justify-center text-[#171717]">
                 <Package size={20} />
@@ -181,7 +181,7 @@ export function AddProductModal({
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          <form onSubmit={handleSubmit} className="p-5 sm:p-6 space-y-5">
             {errorMessage && (
               <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
                 {errorMessage}
@@ -210,7 +210,7 @@ export function AddProductModal({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-xs font-bold text-[#171717] mb-1.5">Prix de vente (FCFA) *</label>
                 <input
@@ -265,7 +265,7 @@ export function AddProductModal({
                 disabled={isSubmitting || !categoryId}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-2 px-8 py-3 rounded-2xl text-xs font-extrabold shadow-lg transition-all disabled:opacity-60 bg-[#FFD43B] text-[#171717] shadow-[#FFD43B]/40 hover:brightness-105"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3 rounded-2xl text-xs font-extrabold shadow-lg transition-all disabled:opacity-60 bg-[#FFD43B] text-[#171717] shadow-[#FFD43B]/40 hover:brightness-105"
               >
                 {isSubmitting ? (
                   <span>Enregistrement...</span>

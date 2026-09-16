@@ -130,17 +130,17 @@ export function ProductDetailModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex justify-center sm:p-4 bg-black/40 backdrop-blur-sm overflow-y-auto overscroll-contain">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.2 }}
-          className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl border border-stone-200 overflow-hidden my-8"
+          className="w-full max-w-4xl bg-white mt-auto sm:my-auto rounded-t-3xl sm:rounded-3xl max-h-[92dvh] sm:max-h-none overflow-y-auto sm:overflow-hidden pb-[env(safe-area-inset-bottom)] sm:pb-0 shadow-2xl border border-stone-200"
         >
-          <div className="px-6 py-4 border-b border-stone-100 flex items-center justify-between bg-[#FBFBFA]">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-[#FFF4BF] text-[#171717] border border-[#FFD43B]/40">
+          <div className="sticky top-0 z-10 sm:static px-4 sm:px-6 py-3 sm:py-4 border-b border-stone-100 flex items-center justify-between gap-2 bg-[#FBFBFA]">
+            <div className="flex items-center gap-2 min-w-0 flex-wrap">
+              <span className="text-xs font-bold px-2.5 py-1 rounded-md truncate max-w-[140px] sm:max-w-none bg-[#FFF4BF] text-[#171717] border border-[#FFD43B]/40">
                 SKU: {product.sku}
               </span>
               <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${statusBadge.bg}`}>
@@ -149,7 +149,7 @@ export function ProductDetailModal({
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               {canManage && (
                 <button
                   onClick={() => setIsEditing(!isEditing)}
@@ -158,7 +158,7 @@ export function ProductDetailModal({
                   }`}
                 >
                   <Edit3 size={14} />
-                  <span>{isEditing ? 'Édition active' : 'Modifier'}</span>
+                  <span className="hidden min-[400px]:inline">{isEditing ? 'Édition active' : 'Modifier'}</span>
                 </button>
               )}
               <button
@@ -171,15 +171,15 @@ export function ProductDetailModal({
           </div>
 
           {errorMessage && (
-            <div className="mx-6 mt-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
+            <div className="mx-4 sm:mx-6 mt-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
               {errorMessage}
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 md:p-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 p-4 sm:p-6 md:p-8">
             {/* Left: QR Code */}
             <div className="space-y-4">
-              <div className="aspect-square rounded-3xl overflow-hidden bg-[#F6F6F3] border border-stone-200/80 relative shadow-inner flex items-center justify-center">
+              <div className="aspect-square w-full max-w-[240px] sm:max-w-[280px] md:max-w-none mx-auto rounded-3xl overflow-hidden bg-[#F6F6F3] border border-stone-200/80 relative shadow-inner flex items-center justify-center">
                 {qrUrl ? (
                   <img src={qrUrl} alt={`QR code ${product.name}`} className="w-3/4 h-3/4 object-contain" />
                 ) : (
@@ -271,7 +271,7 @@ export function ProductDetailModal({
                 ) : (
                   <>
                     <p className="text-xs font-bold text-[#777777] uppercase tracking-wider">{product.category?.name || '—'}</p>
-                    <h2 className="text-2xl font-display font-bold text-[#171717] tracking-tight mt-1 leading-snug">{product.name}</h2>
+                    <h2 className="text-xl sm:text-2xl font-display font-bold text-[#171717] tracking-tight mt-1 leading-snug break-words">{product.name}</h2>
                   </>
                 )}
 
@@ -303,7 +303,7 @@ export function ProductDetailModal({
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-stone-100 flex items-center justify-between">
+              <div className="pt-4 border-t border-stone-100 flex flex-wrap items-center justify-between gap-2">
                 {canManage && (
                   <button
                     onClick={handleDelete}

@@ -83,7 +83,7 @@ export function TeamSection() {
   }
 
   return (
-    <div className="p-6 md:p-8 rounded-3xl bg-white border border-stone-200/80 shadow-2xs space-y-6">
+    <div className="p-4 sm:p-6 md:p-8 rounded-3xl bg-white border border-stone-200/80 shadow-2xs space-y-6">
       <div className="flex items-center gap-3 pb-4 border-b border-stone-100">
         <div className="w-10 h-10 rounded-2xl bg-[#FFF4BF] text-[#171717] flex items-center justify-center">
           <Users size={20} />
@@ -133,7 +133,7 @@ export function TeamSection() {
       )}
 
       <form onSubmit={handleInvite} className="flex flex-col sm:flex-row items-stretch sm:items-end gap-3 flex-wrap">
-        <div className="flex-1 min-w-[160px]">
+        <div className="flex-1 sm:min-w-[160px]">
           <label className="block text-xs font-bold text-[#171717] mb-1.5">Nom complet</label>
           <input
             type="text"
@@ -144,7 +144,7 @@ export function TeamSection() {
             className="w-full px-4 py-2.5 rounded-2xl bg-[#F6F6F3] border border-stone-200 text-xs font-medium text-[#171717] outline-none focus:border-[#FFD43B] focus:bg-white"
           />
         </div>
-        <div className="flex-1 min-w-[160px]">
+        <div className="flex-1 sm:min-w-[160px]">
           <label className="block text-xs font-bold text-[#171717] mb-1.5">Email du membre</label>
           <input
             type="email"

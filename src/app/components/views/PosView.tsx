@@ -148,6 +148,7 @@ export function PosView({ products, categories, shopId, onSaleCompleted, onOpenP
   }
 
   const subtotal = lines.reduce((acc, l) => acc + l.lineTotal, 0)
+  const itemCount = lines.reduce((acc, l) => acc + l.quantity, 0)
 
   const handleCheckout = async () => {
     if (!saleId || lines.length === 0) return
@@ -167,9 +168,9 @@ export function PosView({ products, categories, shopId, onSaleCompleted, onOpenP
   }
 
   return (
-    <div id="pos-view" className="space-y-6 pb-16">
+    <div id="pos-view" className={`space-y-4 sm:space-y-6 lg:pb-16 ${lines.length > 0 ? 'pb-24' : 'pb-6'}`}>
       <div>
-        <h1 className="text-2xl font-display font-bold text-[#171717] tracking-tight">Terminal Caisse</h1>
+        <h1 className="text-xl sm:text-2xl font-display font-bold text-[#171717] tracking-tight">Terminal Caisse</h1>
         <p className="text-xs text-[#777777] mt-0.5">Encaissement en boutique avec mise à jour instantanée du stock.</p>
       </div>
 
@@ -177,13 +178,13 @@ export function PosView({ products, categories, shopId, onSaleCompleted, onOpenP
         <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">{errorMessage}</div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
         {/* Left: Product Selection */}
-        <div className="lg:col-span-7 space-y-4">
-          <div className="p-4 rounded-3xl bg-white border border-stone-200/80 shadow-2xs space-y-3">
+        <div className="lg:col-span-7 space-y-3 sm:space-y-4 min-w-0">
+          <div className="p-3 sm:p-4 rounded-3xl bg-white border border-stone-200/80 shadow-2xs space-y-3">
             <div className="flex items-center gap-2">
-              <div className="relative flex-1">
-                <Search size={16} className="absolute left-3.5 top-3 text-[#777777]" />
+              <div className="relative flex-1 min-w-0">
+                <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#777777] pointer-events-none" />
                 <input
                   type="text"
                   value={search}
@@ -195,18 +196,19 @@ export function PosView({ products, categories, shopId, onSaleCompleted, onOpenP
               <button
                 onClick={() => setIsScannerOpen(true)}
                 disabled={isBusy}
-                className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-[#FFD43B] text-[#171717] text-xs font-bold hover:bg-[#F5C72B] transition-all shrink-0 disabled:opacity-60"
+                aria-label="Scanner un QR code"
+                className="flex items-center justify-center gap-1.5 min-w-11 self-stretch px-3.5 py-2.5 rounded-2xl bg-[#FFD43B] text-[#171717] text-xs font-bold hover:bg-[#F5C72B] transition-all shrink-0 disabled:opacity-60"
                 title="Scanner le QR code d'un produit"
               >
-                <ScanLine size={15} className="text-white" />
+                <ScanLine size={16} className="text-[#171717]" />
                 <span className="hidden sm:inline">Scanner</span>
               </button>
             </div>
 
-            <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar -mx-3 px-3 sm:mx-0 sm:px-0">
               <button
                 onClick={() => setSelectedCategoryId('all')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold whitespace-nowrap shrink-0 transition-all ${
                   selectedCategoryId === 'all' ? 'bg-[#171717] text-white' : 'bg-[#F6F6F3] text-stone-600 hover:bg-stone-200'
                 }`}
               >
@@ -216,7 +218,7 @@ export function PosView({ products, categories, shopId, onSaleCompleted, onOpenP
                 <button
                   key={c.id}
                   onClick={() => setSelectedCategoryId(c.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                  className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold whitespace-nowrap shrink-0 transition-all ${
                     selectedCategoryId === c.id ? 'bg-[#171717] text-white' : 'bg-[#F6F6F3] text-stone-600 hover:bg-stone-200'
                   }`}
                 >
@@ -259,7 +261,7 @@ export function PosView({ products, categories, shopId, onSaleCompleted, onOpenP
             </div>
           )}
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 max-h-[560px] overflow-y-auto pr-1">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3.5 lg:max-h-[560px] lg:overflow-y-auto lg:pr-1">
             {filteredProducts.map((p) => {
               const inCart = lines.find((l) => l.productId === p.id)
               return (
@@ -268,7 +270,7 @@ export function PosView({ products, categories, shopId, onSaleCompleted, onOpenP
                   onClick={() => !isBusy && addToCart(p)}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`p-3.5 rounded-2xl bg-white border cursor-pointer transition-all flex flex-col justify-between relative shadow-2xs ${
+                  className={`p-3 sm:p-3.5 rounded-2xl bg-white border cursor-pointer transition-all flex flex-col justify-between relative shadow-2xs min-w-0 ${
                     inCart ? 'border-[#FFD43B] ring-2 ring-[#FFD43B]/30' : 'border-stone-200/80 hover:border-stone-300'
                   } ${isBusy ? 'opacity-60 pointer-events-none' : ''}`}
                 >
@@ -277,13 +279,13 @@ export function PosView({ products, categories, shopId, onSaleCompleted, onOpenP
                       {inCart.quantity}
                     </span>
                   )}
-                  <div>
-                    <p className="text-xs font-extrabold text-[#171717] line-clamp-1">{p.name}</p>
+                  <div className={inCart ? 'pr-6' : ''}>
+                    <p className="text-xs font-extrabold text-[#171717] line-clamp-2 sm:line-clamp-1 break-words">{p.name}</p>
                     <p className="text-[10px] text-stone-400 font-mono">Stock: {p.stock?.quantity ?? 0}</p>
                   </div>
-                  <div className="mt-2 pt-2 border-t border-stone-100 flex items-center justify-between">
-                    <span className="text-xs font-black text-[#171717]">{formatCurrency(p.price)}</span>
-                    <button className="w-6 h-6 rounded-lg bg-[#FFF4BF] text-[#171717] flex items-center justify-center font-bold">
+                  <div className="mt-2 pt-2 border-t border-stone-100 flex items-center justify-between gap-1">
+                    <span className="text-xs font-black text-[#171717] truncate">{formatCurrency(p.price)}</span>
+                    <button className="w-7 h-7 sm:w-6 sm:h-6 shrink-0 rounded-lg bg-[#FFF4BF] text-[#171717] flex items-center justify-center font-bold">
                       <Plus size={12} />
                     </button>
                   </div>
@@ -294,25 +296,25 @@ export function PosView({ products, categories, shopId, onSaleCompleted, onOpenP
         </div>
 
         {/* Right: Cart & Checkout */}
-        <div className="lg:col-span-5">
-          <div className="p-6 rounded-3xl bg-white border border-stone-200/80 shadow-[0_8px_32px_rgba(0,0,0,0.03)] space-y-6 flex flex-col justify-between">
+        <div id="pos-cart" className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start scroll-mt-20 min-w-0">
+          <div className="p-4 sm:p-6 rounded-3xl bg-white border border-stone-200/80 shadow-[0_8px_32px_rgba(0,0,0,0.03)] space-y-6 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-stone-100">
                 <div className="flex items-center gap-2">
                   <ShoppingBag size={18} className="text-[#171717]" />
                   <h3 className="font-extrabold text-sm text-[#171717]">
-                    Panier ({lines.reduce((a, l) => a + l.quantity, 0)})
+                    Panier ({itemCount})
                   </h3>
                 </div>
                 {lines.length > 0 && (
-                  <button onClick={clearCart} className="text-xs text-rose-600 font-bold hover:underline flex items-center gap-1">
+                  <button onClick={clearCart} className="text-xs text-rose-600 font-bold hover:underline flex items-center gap-1 py-1">
                     <RotateCcw size={12} />
                     <span>Vider</span>
                   </button>
                 )}
               </div>
 
-              <div className="space-y-3 max-h-72 overflow-y-auto my-3 pr-1">
+              <div className="space-y-2 sm:space-y-3 lg:max-h-72 lg:overflow-y-auto my-3 lg:pr-1">
                 {lines.length === 0 ? (
                   <div className="text-center py-12 text-stone-400">
                     <ShoppingBag size={32} className="mx-auto mb-2 opacity-30" />
@@ -323,17 +325,20 @@ export function PosView({ products, categories, shopId, onSaleCompleted, onOpenP
                   lines.map((line) => {
                     const product = products.find((p) => p.id === line.productId)
                     return (
-                      <div key={line.id} className="p-2.5 rounded-2xl bg-[#FBFBFA] border border-stone-100 flex items-center justify-between gap-3">
+                      <div key={line.id} className="p-2.5 rounded-2xl bg-[#FBFBFA] border border-stone-100 flex items-center justify-between gap-2 sm:gap-3">
                         <div className="min-w-0 flex-1">
                           <p className="text-xs font-bold text-[#171717] truncate">{product?.name || 'Produit'}</p>
-                          <p className="text-[10px] text-stone-400">{formatCurrency(line.unitPrice)}/u</p>
+                          <p className="text-[10px] text-stone-400 truncate">
+                            {formatCurrency(line.unitPrice)}/u
+                            <span className="min-[400px]:hidden font-black text-[#171717]"> · {formatCurrency(line.lineTotal)}</span>
+                          </p>
                         </div>
 
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
                           <button
                             onClick={() => updateQuantity(line, -1)}
                             disabled={isBusy}
-                            className="w-6 h-6 rounded-lg bg-white border border-stone-200 flex items-center justify-center text-stone-700"
+                            className="w-8 h-8 sm:w-6 sm:h-6 rounded-lg bg-white border border-stone-200 flex items-center justify-center text-stone-700"
                           >
                             <Minus size={11} />
                           </button>
@@ -341,15 +346,15 @@ export function PosView({ products, categories, shopId, onSaleCompleted, onOpenP
                           <button
                             onClick={() => updateQuantity(line, 1)}
                             disabled={isBusy}
-                            className="w-6 h-6 rounded-lg bg-white border border-stone-200 flex items-center justify-center text-stone-700"
+                            className="w-8 h-8 sm:w-6 sm:h-6 rounded-lg bg-white border border-stone-200 flex items-center justify-center text-stone-700"
                           >
                             <Plus size={11} />
                           </button>
                         </div>
 
-                        <span className="text-xs font-black text-[#171717] min-w-[70px] text-right">{formatCurrency(line.lineTotal)}</span>
+                        <span className="text-xs font-black text-[#171717] min-w-[64px] text-right whitespace-nowrap hidden min-[400px]:inline">{formatCurrency(line.lineTotal)}</span>
 
-                        <button onClick={() => removeItem(line)} disabled={isBusy} className="text-stone-300 hover:text-rose-600">
+                        <button onClick={() => removeItem(line)} disabled={isBusy} aria-label="Retirer" className="p-1.5 -m-1 shrink-0 text-stone-300 hover:text-rose-600">
                           <Trash2 size={13} />
                         </button>
                       </div>
@@ -360,7 +365,7 @@ export function PosView({ products, categories, shopId, onSaleCompleted, onOpenP
             </div>
 
             <div className="space-y-4 pt-4 border-t border-stone-100">
-              <div className="flex justify-between text-[#171717] font-black text-lg">
+              <div className="flex justify-between gap-3 text-[#171717] font-black text-base sm:text-lg">
                 <span>Total à Encaisser</span>
                 <span>{formatCurrency(subtotal)}</span>
               </div>
@@ -381,12 +386,36 @@ export function PosView({ products, categories, shopId, onSaleCompleted, onOpenP
         </div>
       </div>
 
+      {lines.length > 0 && (
+        <div className="lg:hidden fixed z-30 left-3 right-3 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] md:left-auto md:right-6 md:bottom-6 md:w-96">
+          <div className="flex items-center gap-3 p-2 pl-4 rounded-2xl bg-[#171717] text-white shadow-2xl shadow-black/20">
+            <button
+              onClick={() => document.getElementById('pos-cart')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+              className="flex-1 min-w-0 text-left"
+            >
+              <p className="text-[10px] text-stone-400 font-bold uppercase tracking-wider truncate">
+                Panier · {itemCount} article{itemCount > 1 ? 's' : ''}
+              </p>
+              <p className="text-sm font-black truncate">{formatCurrency(subtotal)}</p>
+            </button>
+            <button
+              onClick={handleCheckout}
+              disabled={isBusy}
+              className="flex items-center gap-1.5 px-4 py-3 rounded-xl bg-[#FFD43B] text-[#171717] text-xs font-black shrink-0 disabled:opacity-60"
+            >
+              <Zap size={15} className="fill-[#171717]" />
+              <span>Encaisser</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {completedTotal !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-md bg-white rounded-3xl p-8 text-center shadow-2xl border border-stone-200 space-y-5"
+            className="w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 text-center shadow-2xl border border-stone-200 space-y-5"
           >
             <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto ring-8 ring-emerald-50">
               <Check size={32} className="stroke-[3]" />

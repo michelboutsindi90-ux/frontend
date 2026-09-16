@@ -35,7 +35,11 @@ function AppShell() {
   const { sales, refetch: refetchSales } = useShopSales(currentShop?.id)
 
   const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard')
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  // Below xl the full-width sidebar eats too much of the content area (tablets,
+  // small laptops), so it starts collapsed there.
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth < 1280
+  )
 
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false)
   const [isAddProductOpen, setIsAddProductOpen] = useState(false)
@@ -46,8 +50,8 @@ function AppShell() {
 
   if (!currentShop) {
     return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-[#F6F6F3] p-6">
-        <div className="max-w-sm w-full text-center bg-white rounded-3xl border border-stone-200 shadow-xl p-8 space-y-4">
+      <div className="min-h-dvh w-full flex items-center justify-center bg-[#F6F6F3] p-4 sm:p-6">
+        <div className="max-w-sm w-full text-center bg-white rounded-3xl border border-stone-200 shadow-xl p-6 sm:p-8 space-y-4">
           <div className="w-14 h-14 rounded-2xl bg-[#FFD43B] text-[#171717] flex items-center justify-center mx-auto shadow-md">
             <FolderPlus size={26} />
           </div>
@@ -71,7 +75,7 @@ function AppShell() {
   }
 
   return (
-    <div className="min-h-screen w-full max-w-full bg-[#F6F6F3] text-[#171717] font-sans antialiased flex flex-col md:flex-row">
+    <div className="min-h-dvh w-full max-w-full bg-[#F6F6F3] text-[#171717] font-sans antialiased flex flex-col md:flex-row">
       <CommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
@@ -101,7 +105,7 @@ function AppShell() {
         onOpenCreateStore={() => setIsCreateStoreOpen(true)}
       />
 
-      <div className="flex-1 flex flex-col min-w-0 w-full min-h-screen">
+      <div className="flex-1 flex flex-col min-w-0 w-full min-h-dvh">
         <Header
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -113,7 +117,7 @@ function AppShell() {
           onOpenAddProduct={() => setIsAddProductOpen(true)}
         />
 
-        <main className="flex-1 p-4 pb-40 sm:p-6 md:pb-8 lg:p-8 w-full min-w-0 overflow-x-hidden">
+        <main className="flex-1 px-4 pt-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] sm:px-6 sm:pt-6 md:pb-8 lg:p-8 w-full min-w-0 overflow-x-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab + currentShop.id}
@@ -242,7 +246,7 @@ export default function App() {
 
   if (status === 'idle' || status === 'loading') {
     return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-[#F6F6F3]">
+      <div className="min-h-dvh w-full flex items-center justify-center bg-[#F6F6F3]">
         <Loader2 size={28} className="animate-spin text-[#FFD43B]" />
       </div>
     )

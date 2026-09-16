@@ -24,34 +24,34 @@ export function SalesView({ sales, onSelectSale }: SalesViewProps) {
   })
 
   return (
-    <div id="sales-view" className="space-y-6 pb-16">
+    <div id="sales-view" className="space-y-4 sm:space-y-6 pb-6 md:pb-16">
       <div>
-        <h1 className="text-2xl font-display font-bold text-[#171717] tracking-tight">Historique des Ventes</h1>
+        <h1 className="text-xl sm:text-2xl font-display font-bold text-[#171717] tracking-tight">Historique des Ventes</h1>
         <p className="text-xs text-[#777777] mt-0.5">Suivez toutes les transactions enregistrées en caisse.</p>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-3xl bg-white border border-stone-200/80 shadow-2xs">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-[#777777]">Total Ventes</p>
-          <h3 className="text-2xl font-black text-[#171717] mt-1">{totalSales}</h3>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="p-4 sm:p-5 rounded-3xl min-w-0 bg-white border border-stone-200/80 shadow-2xs">
+          <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider leading-tight text-[#777777]">Total Ventes</p>
+          <h3 className="text-xl sm:text-2xl font-black text-[#171717] mt-1">{totalSales}</h3>
         </div>
-        <div className="p-5 rounded-3xl bg-white border border-stone-200/80 shadow-2xs">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-[#777777]">Validées</p>
-          <h3 className="text-2xl font-black text-emerald-600 mt-1">{validatedSales}</h3>
+        <div className="p-4 sm:p-5 rounded-3xl min-w-0 bg-white border border-stone-200/80 shadow-2xs">
+          <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider leading-tight text-[#777777]">Validées</p>
+          <h3 className="text-xl sm:text-2xl font-black text-emerald-600 mt-1">{validatedSales}</h3>
         </div>
-        <div className="p-5 rounded-3xl bg-[#FFF4BF]/60 border border-[#FFD43B]/40 shadow-2xs">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-stone-700">Brouillons</p>
-          <h3 className="text-2xl font-black text-[#171717] mt-1">{draftSales}</h3>
+        <div className="p-4 sm:p-5 rounded-3xl min-w-0 bg-[#FFF4BF]/60 border border-[#FFD43B]/40 shadow-2xs">
+          <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider leading-tight text-stone-700">Brouillons</p>
+          <h3 className="text-xl sm:text-2xl font-black text-[#171717] mt-1">{draftSales}</h3>
         </div>
-        <div className="p-5 rounded-3xl bg-white border border-stone-200/80 shadow-2xs">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-[#777777]">Annulées / Remboursées</p>
-          <h3 className="text-2xl font-black text-rose-600 mt-1">{cancelledSales}</h3>
+        <div className="p-4 sm:p-5 rounded-3xl min-w-0 bg-white border border-stone-200/80 shadow-2xs">
+          <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider leading-tight text-[#777777]">Annulées / Remboursées</p>
+          <h3 className="text-xl sm:text-2xl font-black text-rose-600 mt-1">{cancelledSales}</h3>
         </div>
       </div>
 
-      <div className="p-4 rounded-3xl bg-white border border-stone-200/80 shadow-2xs space-y-3">
+      <div className="p-3 sm:p-4 rounded-3xl bg-white border border-stone-200/80 shadow-2xs space-y-3">
         <div className="relative">
-          <Search size={16} className="absolute left-3.5 top-3 text-[#777777]" />
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#777777] pointer-events-none" />
           <input
             type="text"
             value={search}
@@ -61,7 +61,7 @@ export function SalesView({ sales, onSelectSale }: SalesViewProps) {
           />
         </div>
 
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar -mx-3 px-3 sm:mx-0 sm:px-0">
           {[
             { id: 'all', label: 'Toutes' },
             { id: 'DRAFT', label: 'Brouillon' },
@@ -72,7 +72,7 @@ export function SalesView({ sales, onSelectSale }: SalesViewProps) {
             <button
               key={s.id}
               onClick={() => setSelectedStatus(s.id)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+              className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold whitespace-nowrap shrink-0 transition-all ${
                 selectedStatus === s.id ? 'bg-[#171717] text-white shadow-xs' : 'bg-[#F6F6F3] text-stone-600 hover:bg-stone-200'
               }`}
             >
@@ -82,7 +82,37 @@ export function SalesView({ sales, onSelectSale }: SalesViewProps) {
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl border border-stone-200/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)] overflow-hidden">
+      <div className="md:hidden bg-white rounded-3xl border border-stone-200/80 divide-y divide-stone-100 overflow-hidden">
+        {filteredSales.map((sale) => {
+          const badge = getStatusBadge(sale.status)
+          const lineCount = sale.lines?.length ?? 0
+          return (
+            <div
+              key={sale.id}
+              onClick={() => onSelectSale(sale)}
+              className="p-3.5 flex items-center justify-between gap-3 active:bg-[#FBFBFA] cursor-pointer"
+            >
+              <div className="min-w-0">
+                <p className="text-xs font-extrabold text-[#171717] font-mono">{sale.id.slice(0, 8)}</p>
+                <p className="text-[11px] text-stone-400 truncate">
+                  {new Date(sale.createdAt).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })} · {lineCount} article
+                  {lineCount > 1 ? 's' : ''}
+                </p>
+              </div>
+              <div className="flex flex-col items-end gap-1 shrink-0">
+                <span className="text-xs font-black text-[#171717] whitespace-nowrap">{formatCurrency(sale.totalAmount)}</span>
+                <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border ${badge.bg}`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />
+                  {badge.label}
+                </span>
+              </div>
+            </div>
+          )
+        })}
+        {filteredSales.length === 0 && <p className="py-10 text-center text-xs text-stone-400">Aucune vente trouvée.</p>}
+      </div>
+
+      <div className="hidden md:block bg-white rounded-3xl border border-stone-200/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs min-w-[600px]">
             <thead>

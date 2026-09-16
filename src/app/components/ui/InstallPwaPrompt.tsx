@@ -70,7 +70,7 @@ export function InstallPwaPrompt() {
   if (!isVisible) return null
 
   return (
-    <div className="fixed bottom-24 md:bottom-5 left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-2rem)] max-w-sm">
+    <div className="fixed bottom-[calc(5.5rem+env(safe-area-inset-bottom))] md:bottom-5 left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-2rem)] max-w-sm">
       <div className="bg-[#171717] text-white rounded-2xl shadow-2xl border border-white/10 p-4 flex items-start gap-3">
         <div className="w-10 h-10 rounded-xl bg-[#FFD43B] text-[#171717] flex items-center justify-center shrink-0">
           <Download size={18} />

@@ -53,7 +53,7 @@ export function CommandPalette({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-black/40 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-start justify-center pt-[calc(0.75rem+env(safe-area-inset-top))] sm:pt-20 px-3 sm:px-4 bg-black/40 backdrop-blur-sm">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: -20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -61,39 +61,40 @@ export function CommandPalette({
           transition={{ duration: 0.15 }}
           className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-stone-200 overflow-hidden"
         >
-          <div className="flex items-center gap-3 px-5 py-4 border-b border-stone-100 bg-[#FBFBFA]">
-            <Search size={20} className="text-[#171717]" />
+          <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-3 sm:py-4 border-b border-stone-100 bg-[#FBFBFA]">
+            <Search size={20} className="text-[#171717] shrink-0" />
             <input
               type="text"
               autoFocus
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Rechercher un produit ou une action..."
-              className="flex-1 bg-transparent text-sm text-[#171717] font-medium outline-none placeholder:text-stone-400"
+              className="flex-1 min-w-0 bg-transparent text-sm text-[#171717] font-medium outline-none placeholder:text-stone-400"
             />
             {search && (
               <button
                 onClick={() => setSearch('')}
-                className="w-6 h-6 rounded-full bg-stone-200 text-stone-600 flex items-center justify-center text-xs hover:bg-stone-300"
+                className="w-6 h-6 shrink-0 rounded-full bg-stone-200 text-stone-600 flex items-center justify-center text-xs hover:bg-stone-300"
               >
                 <X size={13} />
               </button>
             )}
             <button
               onClick={onClose}
-              className="text-xs font-semibold text-stone-500 px-2 py-1 rounded-lg bg-stone-100 hover:bg-stone-200"
+              className="shrink-0 text-xs font-semibold text-stone-500 px-2.5 py-1.5 sm:px-2 sm:py-1 rounded-lg bg-stone-100 hover:bg-stone-200"
             >
-              Échap
+              <span className="sm:hidden">Fermer</span>
+              <span className="hidden sm:inline">Échap</span>
             </button>
           </div>
 
-          <div className="max-h-[60vh] overflow-y-auto p-4 space-y-4">
+          <div className="max-h-[calc(100dvh-7rem)] sm:max-h-[60vh] overflow-y-auto overscroll-contain p-3 sm:p-4 space-y-4">
             {!search && (
               <div>
                 <div className="text-[11px] font-bold uppercase tracking-wider text-stone-400 px-2 mb-2">
                   Actions Rapides
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-2">
                   <button
                     onClick={() => {
                       onNavigate('pos')
@@ -152,8 +153,8 @@ export function CommandPalette({
                         <p className="text-xs font-bold text-[#171717] truncate">{p.name}</p>
                         <p className="text-[11px] text-stone-500">SKU: {p.sku}</p>
                       </div>
-                      <span className="text-xs font-bold text-[#171717]">{formatCurrency(p.price)}</span>
-                      <ArrowRight size={14} className="text-stone-300 group-hover:text-[#171717] group-hover:translate-x-0.5 transition-all" />
+                      <span className="text-xs font-bold text-[#171717] whitespace-nowrap">{formatCurrency(p.price)}</span>
+                      <ArrowRight size={14} className="hidden sm:block text-stone-300 group-hover:text-[#171717] group-hover:translate-x-0.5 transition-all" />
                     </button>
                   ))}
                 </div>

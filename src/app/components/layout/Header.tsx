@@ -57,18 +57,18 @@ export function Header({
   return (
     <header
       id="mercato-header"
-      className="h-20 bg-white/90 backdrop-blur-md border-b border-stone-200/70 sticky top-0 z-30 px-4 sm:px-6 lg:px-8 flex items-center justify-between transition-all"
+      className="h-[calc(4rem+env(safe-area-inset-top))] sm:h-20 pt-[env(safe-area-inset-top)] bg-white/90 backdrop-blur-md border-b border-stone-200/70 sticky top-0 z-30 px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 transition-all"
     >
       {/* Left section: Multi-Store Switcher & Global Search */}
-      <div className="flex items-center gap-2.5 sm:gap-4 flex-1 min-w-0 max-w-xl">
-        <div className="relative shrink-0">
+      <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0 max-w-xl">
+        <div className="relative min-w-0 shrink">
           <button
             id="header-store-select-btn"
             onClick={() => setStoreMenuOpen(!storeMenuOpen)}
-            className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-[#F6F6F3] hover:bg-stone-200/80 transition-colors text-xs font-extrabold text-[#171717]"
+            className="flex items-center gap-2 max-w-full px-3 py-2.5 sm:py-2 rounded-2xl bg-[#F6F6F3] hover:bg-stone-200/80 transition-colors text-xs font-extrabold text-[#171717]"
           >
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100 shrink-0" />
-            <span className="truncate max-w-[110px] sm:max-w-[160px]">{currentName}</span>
+            <span className="truncate max-w-[120px] sm:max-w-[160px]">{currentName}</span>
             <ChevronDown size={14} className="text-[#777777] shrink-0" />
           </button>
 
@@ -79,7 +79,7 @@ export function Header({
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 8, scale: 0.96 }}
                 transition={{ duration: 0.15 }}
-                className="absolute left-0 top-full mt-2 w-80 bg-white rounded-3xl shadow-2xl border border-stone-200 p-2.5 z-50 space-y-1"
+                className="absolute left-0 top-full mt-2 w-[min(20rem,calc(100vw-1.5rem))] bg-white rounded-3xl shadow-2xl border border-stone-200 p-2.5 z-50 space-y-1"
               >
                 <div className="px-3 py-2 flex items-center justify-between border-b border-stone-100 pb-2 mb-1">
                   <span className="text-[10px] font-extrabold text-[#777777] uppercase tracking-wider">
@@ -133,29 +133,31 @@ export function Header({
         <button
           id="header-global-search-btn"
           onClick={onOpenCommandPalette}
-          className="flex items-center gap-2 sm:gap-3 px-3 sm:px-3.5 py-2.5 rounded-2xl bg-[#F6F6F3] hover:bg-stone-200/70 border border-stone-200/40 text-stone-500 hover:text-stone-800 transition-all flex-1 min-w-0 text-xs"
+          aria-label="Rechercher"
+          className="flex items-center justify-center md:justify-start gap-2 sm:gap-3 w-10 h-10 md:w-auto md:h-auto px-0 md:px-3.5 md:py-2.5 rounded-2xl bg-[#F6F6F3] hover:bg-stone-200/70 border border-stone-200/40 text-stone-500 hover:text-stone-800 transition-all shrink-0 md:shrink md:flex-1 min-w-0 text-xs"
         >
           <Search size={15} className="text-[#777777] shrink-0" />
-          <span className="truncate hidden sm:inline">Rechercher un article ou une vente (Cmd + K)...</span>
-          <kbd className="hidden sm:inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-white border border-stone-200 text-[10px] font-bold text-stone-500 shadow-2xs ml-auto">
+          <span className="truncate hidden md:inline">Rechercher un article ou une vente...</span>
+          <kbd className="hidden lg:inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-white border border-stone-200 text-[10px] font-bold text-stone-500 shadow-2xs ml-auto">
             <Command size={10} /> K
           </kbd>
         </button>
       </div>
 
       {/* Right section */}
-      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+      <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
         <div className="relative">
           <motion.button
             id="header-quick-action-btn"
             onClick={() => setQuickActionOpen(!quickActionOpen)}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-2xl bg-[#FFD43B] text-[#171717] font-black text-xs shadow-md shadow-[#FFD43B]/30 hover:brightness-105 transition-all"
+            aria-label="Créer / Action"
+            className="flex items-center gap-1.5 sm:gap-2 h-10 px-3 sm:px-4 rounded-2xl bg-[#FFD43B] text-[#171717] font-black text-xs shadow-md shadow-[#FFD43B]/30 hover:brightness-105 transition-all"
           >
             <Plus size={16} className="stroke-[2.5]" />
-            <span className="hidden sm:inline">Créer / Action</span>
-            <ChevronDown size={14} className="text-[#171717]" />
+            <span className="hidden lg:inline">Créer / Action</span>
+            <ChevronDown size={14} className="text-[#171717] hidden sm:block" />
           </motion.button>
 
           <AnimatePresence>
@@ -165,7 +167,7 @@ export function Header({
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 8, scale: 0.96 }}
                 transition={{ duration: 0.15 }}
-                className="absolute right-0 top-full mt-2 w-60 bg-white rounded-3xl shadow-xl border border-stone-200 p-2 z-50 space-y-1"
+                className="absolute right-0 top-full mt-2 w-[min(15rem,calc(100vw-1.5rem))] bg-white rounded-3xl shadow-xl border border-stone-200 p-2 z-50 space-y-1"
               >
                 {canManage && (
                   <button
@@ -223,13 +225,13 @@ export function Header({
           <button
             id="header-user-avatar-btn"
             onClick={() => setUserMenuOpen(!userMenuOpen)}
-            className="flex items-center gap-2 px-2 py-1.5 rounded-2xl hover:bg-[#F6F6F3] transition-colors"
+            className="flex items-center gap-2 p-0.5 sm:px-2 sm:py-1.5 rounded-2xl hover:bg-[#F6F6F3] transition-colors"
           >
             <div className="w-9 h-9 rounded-2xl bg-[#FFD43B] text-[#171717] flex items-center justify-center font-black text-sm ring-2 ring-[#FFD43B]">
               {(user?.fullName || '?').charAt(0).toUpperCase()}
             </div>
             {effectiveRole && (
-              <span className="hidden sm:inline-block px-2 py-1 rounded-full bg-[#171717] text-white text-[10px] font-bold tracking-wide">
+              <span className="hidden xl:inline-block px-2 py-1 rounded-full bg-[#171717] text-white text-[10px] font-bold tracking-wide">
                 {ROLE_LABELS[effectiveRole]}
               </span>
             )}
@@ -242,11 +244,11 @@ export function Header({
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 8, scale: 0.96 }}
                 transition={{ duration: 0.15 }}
-                className="absolute right-0 top-full mt-2 w-60 bg-white rounded-3xl shadow-xl border border-stone-200 p-2 z-50"
+                className="absolute right-0 top-full mt-2 w-[min(15rem,calc(100vw-1.5rem))] bg-white rounded-3xl shadow-xl border border-stone-200 p-2 z-50"
               >
                 <div className="px-3 py-2 border-b border-stone-100 mb-1">
-                  <p className="text-xs font-extrabold text-[#171717]">{user?.fullName}</p>
-                  <p className="text-[10px] text-[#777777]">{user?.email}</p>
+                  <p className="text-xs font-extrabold text-[#171717] truncate">{user?.fullName}</p>
+                  <p className="text-[10px] text-[#777777] truncate">{user?.email}</p>
                   {effectiveRole && (
                     <span className="inline-block mt-1.5 px-2 py-0.5 rounded-full bg-[#FFF4BF] text-[#171717] text-[10px] font-bold">
                       {ROLE_LABELS[effectiveRole]}
@@ -259,7 +261,7 @@ export function Header({
                     setUserMenuOpen(false)
                     setActiveTab('settings')
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-stone-700 hover:bg-[#F6F6F3]"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-stone-700 hover:bg-[#F6F6F3]"
                 >
                   <Sliders size={15} />
                   <span>Paramètres de boutique</span>
@@ -272,7 +274,7 @@ export function Header({
                     setUserMenuOpen(false)
                     logout()
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-red-600 hover:bg-red-50"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-red-600 hover:bg-red-50"
                 >
                   <LogOut size={15} className="text-red-500" />
                   <span>Se déconnecter</span>

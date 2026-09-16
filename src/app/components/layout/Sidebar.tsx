@@ -57,7 +57,7 @@ export function Sidebar({
       initial={false}
       animate={{ width: isCollapsed ? 88 : 280 }}
       transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-      className="hidden md:flex md:sticky md:top-0 md:h-screen shrink-0 z-40 bg-white border-r border-stone-200/80 flex-col justify-between select-none shadow-[2px_0_24px_rgba(0,0,0,0.02)]"
+      className="hidden md:flex md:sticky md:top-0 md:h-dvh shrink-0 z-40 bg-white border-r border-stone-200/80 flex-col justify-between select-none shadow-[2px_0_24px_rgba(0,0,0,0.02)]"
     >
       {/* Top Brand Header */}
       <div>
